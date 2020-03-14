@@ -1,0 +1,128 @@
+
+#uploadText {
+	color: #5cacee;
+	position: absolute;
+	right: 20%;
+	top: 2%;
+	font-size: 18px;
+}
+
+#upload {
+	width: 30%;
+	height: 40%;
+	min-width: 100px;
+	min-height: 150px;
+	background-color: white;
+	border-radius: 10px;
+	box-shadow: 1px 1px 3px gray;
+	position: absolute;
+	top: 1%;
+	left: 35%;
+	z-index: 1;
+}
+
+#headName {
+	font-size: 25px;
+	position: absolute;
+	left: 10%;
+	top: 1%;
+}
+
+#xhx {
+	height: 1px;
+	background-color: gainsboro;
+	width: 80%;
+	margin: 50px auto 10px auto
+}
+
+#File_synchronization_time {
+	color: #5cacee;
+	font-size: 15px;
+	position: absolute;
+	left: 35%;
+}
+
+#main_box{
+	width: 80%;
+	margin: 50px auto auto auto;
+}
+
+#main_position {
+	margin-left: 20%;
+}
+
+.listObject {
+	float: left;
+	margin-right: 15%;
+	margin-top: 1%;
+}
+
+.listClass {
+	background-color: #5CACEE;
+	width: 100px;
+	height: 100px;
+}
+
+#ulStyle {}
+
+
+
+#fliesList {
+	width: 100%;
+}
+
+#selectBox {
+	width: 20%;
+	height: 20%;
+	background: white;
+	border: 1px solid gainsboro;
+	box-shadow: 1px 1px 3px gray;
+	position: fixed;
+	left: 40%;
+	top: 0.5%;
+	z-index: 1;
+	display: none;
+	min-width: 200px;
+}
+
+#DeleteBt {
+	width: 25%;
+	height: 20%;
+	background: blue;
+	z-index: 2;
+	position: absolute;
+	top: 40%;
+	left: 15%;
+	color: white;
+}
+
+#DownloadBt {
+	width: 25%;
+	height: 20%;
+	background: blue;
+	z-index: 2;
+	position: absolute;
+	top: 40%;
+	right: 15%;
+	color: white;
+}
+
+#WindowClose {
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	background: blue;
+	color: white;
+}
+
+
+/*.DownloadBt_And_DeleteBt_Style{
+width: 25%;
+height: 10%;
+background: blue;
+z-index: 2;
+position: relative;
+top:40%;
+}*/

@@ -1,5 +1,5 @@
 
-#uploadText {
+#upload {
 	color: #5cacee;
 	position: absolute;
 	right: 20%;
@@ -7,19 +7,6 @@
 	font-size: 18px;
 }
 
-#upload {
-	width: 30%;
-	height: 40%;
-	min-width: 100px;
-	min-height: 150px;
-	background-color: white;
-	border-radius: 10px;
-	box-shadow: 1px 1px 3px gray;
-	position: absolute;
-	top: 1%;
-	left: 35%;
-	z-index: 1;
-}
 
 #headName {
 	font-size: 25px;

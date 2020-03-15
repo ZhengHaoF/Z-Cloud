@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>上传</title>
+    <style>
+        h1, h2 {
+            font-weight: normal;
+        }
+
+        #msg {
+            margin-top: 10px;
+        }
+    </style>
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <link href="../../layui/css/layui.css" rel="stylesheet">
+    <script src="../../layui/layui.js"></script>
+    <script src="./cos-auth.min.js"></script>
+</head>
+<body>
+<div style="left: 10%;position: absolute;width: 90%">
+    <input id="fileSelector" type="file" style="width: 80%;height: 40px;border: #00CC66 solid 2px;font-size: 30px"><br>
+    <button id="submitBtn" class="layui-btn" style="width: 80%;margin: 10px auto 0 auto">开始上传</button>
+    <div id="msg"></div>
+    <div class="layui-progress layui-progress-big" lay-filter="progress" style="width: 80%;">
+        <!--这他妈奇葩用lay-filter来当尼玛ID-->
+        <div class="layui-progress-bar" lay-showPercent="yes"></div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        // 请求用到的参数
+        var Bucket = 'z-cloud-1253780623';
+        var Region = 'ap-shanghai';
+        var protocol = location.protocol === 'https:' ? 'https:' : 'http:';
+        var prefix = protocol + '//' + Bucket + '.cos.' + Region + '.myqcloud.com/';
+
+        // 对更多字符编码的 url encode 格式
+        var camSafeUrlEncode = function (str) {
+            return encodeURIComponent(str)
+                .replace(/!/g, '%21')
+                .replace(/'/g, '%27')
+                .replace(/\(/g, '%28')
+                .replace(/\)/g, '%29')
+                .replace(/\*/g, '%2A');
+        };
+
+        // 计算签名
+        var getAuthorization = function (options, callback) {
+            // var url = 'http://127.0.0.1:3000/sts-auth';
+            var url = '../../cos-js-sdk-v5/server/sts.php';
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', url, true);
+            xhr.onload = function (e) {
+                var credentials;
+                try {
+                    credentials = (new Function('return ' + xhr.responseText))().credentials;
+                } catch (e) {
+                }
+                if (credentials) {
+                    callback(null, {
+                        XCosSecurityToken: credentials.sessionToken,
+                        Authorization: CosAuth({
+                            SecretId: credentials.tmpSecretId,
+                            SecretKey: credentials.tmpSecretKey,
+                            Method: options.Method,
+                            Pathname: options.Pathname,
+                        })
+                    });
+                } else {
+                    console.error(xhr.responseText);
+                    callback('获取签名出错');
+                }
+            };
+            xhr.onerror = function (e) {
+                callback('获取签名出错');
+            };
+            xhr.send();
+        };
+
+        // 上传文件
+        var uploadFile = function (file, callback) {
+            var Key = '' + file.name; // 这里指定上传目录和文件名
+            getAuthorization({Method: 'PUT', Pathname: '/' + Key}, function (err, info) {
+
+                if (err) {
+                    alert(err);
+                    return;
+                }
+
+                var auth = info.Authorization;
+                var XCosSecurityToken = info.XCosSecurityToken;
+                var url = prefix + camSafeUrlEncode(Key).replace(/%2F/g, '/');
+                var xhr = new XMLHttpRequest();
+                xhr.open('PUT', url, true);
+                xhr.setRequestHeader('Authorization', auth);
+                XCosSecurityToken && xhr.setRequestHeader('x-cos-security-token', XCosSecurityToken);
+                xhr.upload.onprogress = function (e) {
+                    console.log('上传进度 ' + (Math.round(e.loaded / e.total * 10000) / 100) + '%');
+                    var rate = (Math.round(e.loaded / e.total * 10000) / 100) + '%'
+                    layui.use('element', function () {
+                        var element = layui.element;
+                        element.progress('progress', rate); //改变滚动条大小
+                    });
+                };
+                xhr.onload = function () {
+                    if (xhr.status === 200 || xhr.status === 206) {
+                        var ETag = xhr.getResponseHeader('etag');
+                        callback(null, {url: url, ETag: ETag});
+                    } else {
+                        callback('文件 ' + Key + ' 上传失败，状态码：' + xhr.status);
+                    }
+                };
+                xhr.onerror = function () {
+                    callback('文件 ' + Key + ' 上传失败，请检查是否没配置 CORS 跨域规则');
+                };
+                xhr.send(file);
+            });
+        };
+
+        // 监听表单提交
+        document.getElementById('submitBtn').onclick = function (e) {
+            var file = document.getElementById('fileSelector').files[0];
+            if (!file) {
+                document.getElementById('msg').innerText = '未选择上传文件';
+                return;
+            }
+            file && uploadFile(file, function (err, data) {
+                console.log(err || data);
+                layui.use('layer', function () {
+                    layer.msg('上传成功,请刷新网页查看');
+                });
+            });
+        };
+    })();
+</script>
+</body>
+</html>

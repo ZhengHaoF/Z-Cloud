@@ -1,6 +1,6 @@
 <?php
 //下载文件
-require "../cos_sdk_config.php";
+require "./cos_sdk_config.php";
 $key = $_POST['file_name'];//对象在存储桶中的位置，即称对象键
 ## getObjectUrl(获取文件 UrL)
 try {

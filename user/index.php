@@ -29,7 +29,6 @@ function getGroup()
 }
 
 ?>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -118,7 +117,6 @@ function getGroup()
         })
     </script>
     <script>
-
         function file_operating(file_name) {
             //弹窗
             layui.use('layer', function () {
@@ -138,13 +136,23 @@ function getGroup()
                                 "file_name": file_name
                             }, function (data) {
                                 layer.msg(data);
-                                layer.close(index);
+                                location.reload();
                             });
                             layer.close(index);
                         }
                     });
                 }
             )
+        }
+
+        function up() {
+            layui.use('layer', function () {
+                layer.open({
+                    type: 2,
+                    area:['50%','40%'],
+                    content: ['./upload/upload.html', 'no'] //不出现滚动条
+                });
+            });
         }
     </script>
     <!-- 人物  CSS-->
@@ -153,7 +161,7 @@ function getGroup()
 <body>
 <header>
     <div id="headName"><em>Z-Cloud</em></div>
-    <div id="uploadText">上传</div>
+    <div id="upload" onclick="up()">上传</div>
     <div id="xhx"></div>
     <div id="File_synchronization_time">文件同步时间：<span><?php echo(date("Y-m-d H:i:s")) ?></span><span
                 id="IpAddress"></span></div>

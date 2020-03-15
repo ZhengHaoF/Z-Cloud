@@ -1,6 +1,6 @@
 <?php
 //引入COS初始化文件
-require "../cos_sdk_config.php";
+require "./cos_sdk_config.php";
 //查询文件列表
 try {
     $result = $cosClient->listObjects(array(

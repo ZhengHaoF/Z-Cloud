@@ -1,6 +1,6 @@
 <?php
 //COS SDK初始化
-require "cos-php-sdk-v5/vendor/autoload.php"; //引入腾讯SDK
+require "../cos-php-sdk-v5/vendor/autoload.php"; //引入腾讯SDK
 $secretId = "AKID0ufFWm1ujSI2bGP5EmBSbZM1Wq01KmRz"; //"云 API 密钥 SecretId";
 $secretKey = "V2QrCOODpWFtMBuTs680lZKuIUefU7d5"; //"云 API 密钥 SecretKey";
 $region = "ap-shanghai"; //设置一个默认的存储桶地域

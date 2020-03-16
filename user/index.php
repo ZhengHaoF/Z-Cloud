@@ -77,29 +77,30 @@ function getGroup()
     </script>
     <!--<script src="js/md5.js"></script>md5加密 -->
     <script>
-//获取COOKIE
-function getCookie(cookie_name) {
-    var allcookies = document.cookie;
-    //索引长度，开始索引的位置
-    var cookie_pos = allcookies.indexOf(cookie_name);
+        //获取COOKIE
+        function getCookie(cookie_name) {
+            var allcookies = document.cookie;
+            //索引长度，开始索引的位置
+            var cookie_pos = allcookies.indexOf(cookie_name);
 
-    // 如果找到了索引，就代表cookie存在,否则不存在
-    if (cookie_pos != -1) {
-        // 把cookie_pos放在值的开始，只要给值加1即可
-        //计算取cookie值得开始索引，加的1为“=”
-        cookie_pos = cookie_pos + cookie_name.length + 1;
-        //计算取cookie值得结束索引
-        var cookie_end = allcookies.indexOf(";", cookie_pos);
+            // 如果找到了索引，就代表cookie存在,否则不存在
+            if (cookie_pos != -1) {
+                // 把cookie_pos放在值的开始，只要给值加1即可
+                //计算取cookie值得开始索引，加的1为“=”
+                cookie_pos = cookie_pos + cookie_name.length + 1;
+                //计算取cookie值得结束索引
+                var cookie_end = allcookies.indexOf(";", cookie_pos);
 
-        if (cookie_end == -1) {
-            cookie_end = allcookies.length;
+                if (cookie_end == -1) {
+                    cookie_end = allcookies.length;
 
+                }
+                //得到想要的cookie的值
+                var value = unescape(allcookies.substring(cookie_pos, cookie_end));
+            }
+            return value;
         }
-        //得到想要的cookie的值
-        var value = unescape(allcookies.substring(cookie_pos, cookie_end));
-    }
-    return value;
-}
+
         window.onload = function () {
             //记录日志
             /*  if ("<?php echo $_COOKIE['id'];?>" != "") {
@@ -117,26 +118,30 @@ function getCookie(cookie_name) {
                     document.getElementById("IpAddress").innerHTML = t;
                 }
             );
+            $.post("../API/get_file_list.php", {
+                "Token": getCookie("Token"),
+                "id": getCookie("id"),
+                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳s
+            }, function (data) {
+                var files_message_json = $.parseJSON(data);
+                var files_lenght = files_message_json.length;
+                var files_list_box_html = ""; //要加载的HTML文档
+                for (var i = 0; i < files_lenght; i++) {
+                    var file_name = files_message_json[i]['FilesName']; //文件名
+                    var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
+                    var fiel_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
+                    files_list_box_html = files_list_box_html + " <tr>" +
+                        "            <td>" + file_name + "</td>" +
+                        "            <td>" + file_size.toFixed(2).toString() + "MB" + "</td>" +
+                        "            <td>" +
+                        "                <button class='layui-btn' style='float: left' onclick='file_operating(this.value)' value='" + file_name + "' >文件操作</button>" +
+                        "            </td>" +
+                        "        </tr>"
+                }
+                document.getElementById("files_list_box").innerHTML = files_list_box_html;
+            })
         };
 
-        $.get("../API/get_file_list.php", function (data) {
-            var files_message_json = $.parseJSON(data);
-            var files_lenght = files_message_json.length;
-            var files_list_box_html = ""; //要加载的HTML文档
-            for (var i = 0; i < files_lenght; i++) {
-                var file_name = files_message_json[i]['FilesName']; //文件名
-                var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
-                var fiel_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
-                files_list_box_html = files_list_box_html + " <tr>" +
-                    "            <td>" + file_name + "</td>" +
-                    "            <td>" + file_size.toFixed(2).toString() + "MB" + "</td>" +
-                    "            <td>" +
-                    "                <button class='layui-btn' style='float: left' onclick='file_operating(this.value)' value='" + file_name + "' >文件操作</button>" +
-                    "            </td>" +
-                    "        </tr>"
-            }
-            document.getElementById("files_list_box").innerHTML = files_list_box_html;
-        })
     </script>
     <script>
         function file_operating(file_name) {
@@ -149,8 +154,9 @@ function getCookie(cookie_name) {
                             //按钮【按钮一】的回调
                             $.post("../API/git_file_url.php", {
                                 "file_name": file_name,
-                                "Token":getCookie("Token"),
-                                "id":getCookie("id")
+                                "Token": getCookie("Token"),
+                                "id": getCookie("id"),
+                                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
                                 window.open(data);
                                 layer.close(index);
@@ -158,8 +164,9 @@ function getCookie(cookie_name) {
                         }, btn2: function (index) {
                             $.post("../API/del_file.php", {
                                 "file_name": file_name,
-                                "Token":getCookie("Token"),
-                                "id":getCookie("ZHF")
+                                "Token": getCookie("Token"),
+                                "id": getCookie("id"),
+                                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
                                 layer.msg(data);
                                 location.reload();

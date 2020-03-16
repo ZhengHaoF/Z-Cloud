@@ -77,7 +77,29 @@ function getGroup()
     </script>
     <!--<script src="js/md5.js"></script>md5加密 -->
     <script>
+//获取COOKIE
+function getCookie(cookie_name) {
+    var allcookies = document.cookie;
+    //索引长度，开始索引的位置
+    var cookie_pos = allcookies.indexOf(cookie_name);
 
+    // 如果找到了索引，就代表cookie存在,否则不存在
+    if (cookie_pos != -1) {
+        // 把cookie_pos放在值的开始，只要给值加1即可
+        //计算取cookie值得开始索引，加的1为“=”
+        cookie_pos = cookie_pos + cookie_name.length + 1;
+        //计算取cookie值得结束索引
+        var cookie_end = allcookies.indexOf(";", cookie_pos);
+
+        if (cookie_end == -1) {
+            cookie_end = allcookies.length;
+
+        }
+        //得到想要的cookie的值
+        var value = unescape(allcookies.substring(cookie_pos, cookie_end));
+    }
+    return value;
+}
         window.onload = function () {
             //记录日志
             /*  if ("<?php echo $_COOKIE['id'];?>" != "") {
@@ -126,14 +148,18 @@ function getGroup()
                             //  文件操作
                             //按钮【按钮一】的回调
                             $.post("../API/git_file_url.php", {
-                                "file_name": file_name
+                                "file_name": file_name,
+                                "Token":getCookie("Token"),
+                                "id":getCookie("id")
                             }, function (data) {
                                 window.open(data);
                                 layer.close(index);
                             })
                         }, btn2: function (index) {
                             $.post("../API/del_file.php", {
-                                "file_name": file_name
+                                "file_name": file_name,
+                                "Token":getCookie("Token"),
+                                "id":getCookie("ZHF")
                             }, function (data) {
                                 layer.msg(data);
                                 location.reload();
@@ -149,7 +175,7 @@ function getGroup()
             layui.use('layer', function () {
                 layer.open({
                     type: 2,
-                    area:['50%','40%'],
+                    area: ['50%', '40%'],
                     content: ['./upload/upload.html', 'no'] //不出现滚动条
                 });
             });

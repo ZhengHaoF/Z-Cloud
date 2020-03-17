@@ -118,7 +118,7 @@ function getGroup()
                     document.getElementById("IpAddress").innerHTML = t;
                 }
             );
-            $.post("../API/get_file_list.php", {
+            $.post("../API/get_user_files_list.php", {  //获取用户文件
                 "Token": getCookie("Token"),
                 "id": getCookie("id"),
                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳s
@@ -127,7 +127,7 @@ function getGroup()
                 var files_lenght = files_message_json.length;
                 var files_list_box_html = ""; //要加载的HTML文档
                 for (var i = 0; i < files_lenght; i++) {
-                    var file_name = files_message_json[i]['FilesName']; //文件名
+                    var file_name = decodeURI(files_message_json[i]['FilesName']); //文件名URL解码
                     var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
                     var fiel_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
                     files_list_box_html = files_list_box_html + " <tr>" +
@@ -148,7 +148,7 @@ function getGroup()
             //弹窗
             layui.use('layer', function () {
                     layer.confirm('请选择操作？', {
-                        btn: ['下载', '删除']
+                        btn: ['下载', '删除','分享']
                         , btn1: function (index) {
                             //  文件操作
                             //按钮【按钮一】的回调
@@ -162,6 +162,17 @@ function getGroup()
                                 layer.close(index);
                             })
                         }, btn2: function (index) {
+                            $.post("../API/del_file.php", {
+                                "file_name": file_name,
+                                "Token": getCookie("Token"),
+                                "id": getCookie("id"),
+                                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
+                            }, function (data) {
+                                layer.msg(data);
+                                location.reload();
+                            });
+                            layer.close(index);
+                        },btn3: function (index) {
                             $.post("../API/del_file.php", {
                                 "file_name": file_name,
                                 "Token": getCookie("Token"),

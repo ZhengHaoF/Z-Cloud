@@ -5,7 +5,7 @@
     $id = $_POST['id'];
     $conn = mysqli_connect($MySqlHost,$MySqlUser,$MySqlPwd,$MySqlDatabaseName);
     PostEmail($email,"【Z-Cloud云盘网页端】您的注册链接是"."<br/><a>". $host ."API/reg_confirm.php?username=".$username."&id=".$id."</a>"."<br/>请复制到同一个浏览器打开<br/>"."如果不是本人操作，请忽略此邮件");
-    setcookie("reg_id",$id,time()+3600,"/");
+    setcookie("reg",$id,time()+3600,"/");
     function PostEmail($address,$txt){
         require '../API/mailer/class.phpmailer.php';
         require '../API/mailer/class.smtp.php';

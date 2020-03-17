@@ -1,9 +1,10 @@
 <?php
+//查询所有文件列表
+/*
 //引入COS初始化文件
 require "./cos_sdk_config.php";
 require "./RSA_decode.php"; //引入加密PHP
 require "../config.php";
-//查询文件列表
 $TokenJson = RSA_decode($_POST['Token']);
 $id = $_POST['id']; //用户名
 $Token = json_decode($TokenJson, true); //true是让这个傻逼东西返回将返回 array 而非 object 。妈的好端端要返回对象，老子搞一天
@@ -45,3 +46,4 @@ if (time() - $time < 3600 and time() - $userTime < 5) {
     echo "<script>alert('非法请求')</script>";
     echo time() - $time;
 }
+*/

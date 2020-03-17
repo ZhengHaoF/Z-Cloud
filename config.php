@@ -5,3 +5,4 @@
     $MySqlPwd = "root";
     $MySqlDatabaseName = "zcloud";
     $host = "http://localhost/Z-Cloud/"; //网站地址
+

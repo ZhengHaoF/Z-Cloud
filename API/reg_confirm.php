@@ -4,7 +4,7 @@ require("../config.php");
 require "./new_user_folder.php";
 $id = $_GET['id'];
 $user = $_GET['username'];
-$reg_id = $_COOKIE['reg_id'];    //获取cookie中的ID
+$reg_id = $_COOKIE['reg'];    //获取cookie中的ID
 if ($id = $reg_id) {
     $conn = mysqli_connect($MySqlHost, $MySqlUser, $MySqlPwd, $MySqlDatabaseName);
     $res = mysqli_query($conn, "SELECT * FROM users WHERE `user` = '$user'");

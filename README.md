@@ -1,37 +1,35 @@
 # Z-Cloud
 
-#### 介绍
 Z-Cloud云盘网页端
 
-#### 软件架构
-软件架构说明
+#### 介绍
 
+据IDC预测，2020年全球产生数据量将超过40ZB，相当于地球上每个人产生5200GB的数据。
 
-#### 安装教程
+如此海量的数据即使去除不必要的文件后，数量也非常庞大
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+你小时候的照片丢了多少？忍痛清理了多少手机相册？
+
+从2016年360云盘停止个人服务至今，大大小小的云存储服务要么限速，要么限空间
+
+原因无外乎是存储成本太高，不得以而为之，作为消费者，我们如何找到价格最低廉的云存储服务呢？
+
+只有从根源入手，我们租用对象存储自己来搭建云盘，抛开一切不必要的成本，才能降低价格。
+
+所以这就有了Z-Cloud
+ ——咸鱼郑某
+#### 网盘介绍
+1.  这原本是高一高二写的一个东西，奈何水平太差，实在更新不下去了。得益于蝙蝠，于2020年春天又开始更新
+2.  秉承着能用就行的原则，写了许多奇葩的代码
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
+1.  为了掩盖水平不足，我写了大量API接口都堆在API文件夹里，每个文档注释倒是挺全
+2. config.php是配置文件，根据实际情况修改
+3. 在API文件夹中有个cos_sdk_config.php文件，把相应的secretId、secretKey、region、bucket替换掉就好
+4. 因为不想动腾讯的SDK，所以在cos-js-sdk-v5/server/sts.php里还需要改一遍secretId、secretKey、region、bucket
 #### 参与贡献
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+ 一个人写就是爽
 
 
-#### 码云特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5.  码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)

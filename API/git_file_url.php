@@ -20,7 +20,8 @@ if(time()-$time<3600 and time()-$userTime < 5){
         try {
             $signedUrl = $cosClient->getObjectUrl($bucket, $key, '+10 minutes');
             // 请求成功
-            echo $signedUrl;
+            //echo $signedUrl;
+            echo str_replace($source_station_domain,$speed_up_domain,$signedUrl); //把原站域名替换成加速域名
         } catch (\Exception $e) {
             // 请求失败
             print_r($e);

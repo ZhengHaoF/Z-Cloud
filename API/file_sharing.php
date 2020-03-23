@@ -21,7 +21,7 @@ if(time()-$time<3600 and time()-$userTime < 5){
             $signedUrl = $cosClient->getObjectUrl($bucket, $key, '+50000 minutes');
             // 请求成功
             //echo $signedUrl;
-            echo get_short_url(urlencode($signedUrl)); //网址缩短加一个URL编码
+            echo get_short_url(urlencode(str_replace($source_station_domain,$speed_up_domain,$signedUrl))); //原站域名替换成加速域名,并把网址缩短加一个URL编码
         } catch (\Exception $e) {
             // 请求失败
             print_r($e);

@@ -148,7 +148,7 @@ function getGroup()
             //弹窗
             layui.use('layer', function () {
                     layer.confirm('请选择操作？', {
-                        btn: ['下载', '删除','分享']
+                        btn: ['下载', '删除', '分享']
                         , btn1: function (index) {
                             //  文件操作
                             //按钮【按钮一】的回调
@@ -172,15 +172,17 @@ function getGroup()
                                 location.reload();
                             });
                             layer.close(index);
-                        },btn3: function (index) {
-                            $.post("../API/del_file.php", {
+                        }, btn3: function (index) {
+                            $.post("../API/file_sharing.php", {
                                 "file_name": file_name,
                                 "Token": getCookie("Token"),
                                 "id": getCookie("id"),
                                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
-                                layer.msg(data);
-                                location.reload();
+                                layer.open({
+                                    title: '文件链接'
+                                    , content: $.parseJSON(data).url + "<br>链接30天内有效"
+                                });
                             });
                             layer.close(index);
                         }

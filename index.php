@@ -6,8 +6,11 @@ require "./API/GetIP.php";
 <head>
     <meta charset="UTF-8">
     <title>Login Form</title>
-    <!--//手机端自适应--> <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <!--//手机端自适应--><meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!--//手机端自适应-->
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <!--//手机端自适应-->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <script src="js/mDialogMin.js"></script><!--弹窗JS-->
     <link href="css/dialog.css" rel="stylesheet">
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
@@ -41,7 +44,7 @@ require "./API/GetIP.php";
                                     }
                                 );
 
-                                $.post("./register/Email.php",
+                                $.post("./API/Email.php",
                                     {
                                         username: users,
                                         email: email,
@@ -66,11 +69,33 @@ require "./API/GetIP.php";
                         Dialog.close(this);
                     },
                     关闭: function () {
-                        Dialog.init('你点击了关闭', 1000);
                         Dialog.close(this);
                     }
                 }
             });
+        }
+    </script>
+    <script>
+        function retrieve_password() {
+            Dialog.init(' <input type="mail" placeholder="请输入邮箱" id="email" style="margin:8px 0;width:100%;padding:' +
+                '11px 8px;font-size:15px; border:1px solid #999;"/>', {
+                    title: '找回密码',
+                    button: {
+                        确定: function () {
+                            var email = document.getElementById("email").value;
+                            var time = getTimer();
+
+                            Dialog.close(this);
+                            Dialog.init('两次密码不相同', 1000);
+
+                        }
+                    },
+                    关闭: function () {
+                        Dialog.close(this);
+                    }
+                }
+            )
+            ;
         }
     </script>
     <script>
@@ -136,6 +161,7 @@ require "./API/GetIP.php";
         <button type="button" onClick="zc()" id="register" name="register" class="btn btn-primary btn-block btn-large"
                 style="margin-top: 10px">注册
         </button>
+        <div style="color: white" onclick="retrieve_password()">找回密码</div>
     </form>
 </div>
 </body>

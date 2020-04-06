@@ -57,6 +57,7 @@ function getGroup()
         }
     </script>
     <script>
+        var up_box_h; //单击上传弹出框的高度
         //手机自适应
         (function (doc, win) {
             var docEl = doc.documentElement,
@@ -65,9 +66,10 @@ function getGroup()
                     var clientWidth = docEl.clientWidth;
                     if (!clientWidth) return;
                     if (clientWidth >= 750) {
-
+                        up_box_h = "50%";
                     } else {
-                        docEl.style.fontSize = '20px'
+                        docEl.style.fontSize = '20px';
+                        up_box_h = "90%";
                     }
                 };
             if (!doc.addEventListener) return;
@@ -131,7 +133,7 @@ function getGroup()
                     var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
                     var fiel_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
                     files_list_box_html = files_list_box_html + " <tr>" +
-                        "            <td>" + file_name + "</td>" +
+                        "            <td onclick='file_operating(this.value)' value='" + file_name + "'>" + file_name + "</td>" +
                         "            <td>" + file_size.toFixed(2).toString() + "MB" + "</td>" +
                         "            <td>" +
                         "                <button class='layui-btn' style='float: left' onclick='file_operating(this.value)' value='" + file_name + "' >文件操作</button>" +
@@ -190,12 +192,11 @@ function getGroup()
                 }
             )
         }
-
         function up() {
             layui.use('layer', function () {
                 layer.open({
                     type: 2,
-                    area: ['50%', '40%'],
+                    area: [up_box_h, '30%'],
                     content: ['./upload/upload.html', 'no'] //不出现滚动条
                 });
             });
@@ -216,11 +217,6 @@ function getGroup()
 <!--第一列-->
 <div id="main_box">
     <table class="layui-table" id="file_list">
-        <colgroup>
-            <col width="65%">
-            <col width="20%">
-            <col>
-        </colgroup>
         <thead>
         <tr>
             <th>文件名</th>

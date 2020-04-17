@@ -1,5 +1,5 @@
 <?php
-// 加密数据
+// RSA加密数据
 //$data = $_POST['data'];
 function RSA_encryption($pwd,$time)
 {

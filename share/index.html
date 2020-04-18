@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>输入提取码</title>
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <link href="../layui/css/layui.css" rel="stylesheet">
+    <link href="css/share_css.css" rel="stylesheet">
+    <script src="../layui/layui.js"></script>
+    <script>
+        function run() {
+            var file_code = document.getElementById("file_code").value;
+            $.post("../API/share_verify.php",{
+                "file_code":file_code
+            },function (data) {
+                //找到HTTP头就返回文件URL：http://localhost/Z-Cloud/share/s.php?file_code=OKKO
+                if (data.toString().indexOf("http")!=-1){
+                    window.open(data);
+                }else{
+                    layer.msg(data);
+                }
+            })
+        }
+    </script>
+</head>
+<body style="background-color: #F2F2F2;">
+<div class="layui-card" style="width: 40%;margin:10% auto auto auto;box-shadow: 10px 10px 5px #888888;">
+    <div class="layui-card-header">请输入提取码</div>
+    <div class="layui-card-body">
+    <div>
+        <div class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+            <div class="layui-form-item">
+                <label class="layui-form-label">提取码：</label>
+                <div class="layui-input-block">
+                    <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input" id="file_code">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <button class="layui-btn" lay-submit lay-filter="*" onclick="run()">立即提交</button>
+                   <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+<script>
+    layui.use('form', function () {
+        var form = layui.form;
+
+        //各种基于事件的操作，下面会有进一步介绍
+    });
+</script>
+</body>
+</html>

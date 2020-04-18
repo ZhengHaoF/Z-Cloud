@@ -1,0 +1,29 @@
+#main_box{
+    width: 70%;
+    margin: 5% auto auto auto;
+}
+#file_name{
+    font-size: 30px;
+    text-align:center;
+}
+
+#file_property{
+    width: 70%;
+    margin: 0 auto;
+    font-size: 20px;
+    line-height: 200%;
+}
+
+.file_property{
+    color: #bbbbbb;
+}
+
+#file_operating{
+    margin: 0 auto;
+    text-align: center;
+    padding: 10px;
+}
+
+hr{
+
+}

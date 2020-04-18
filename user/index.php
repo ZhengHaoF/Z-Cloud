@@ -183,7 +183,7 @@ function getGroup()
                             }, function (data) {
                                 layer.open({
                                     title: '文件链接'
-                                    , content: $.parseJSON(data).url + "<br>链接30天内有效"
+                                    , content: $.parseJSON(data)['url'] + "<br>提取码：" + $.parseJSON(data)['file_code'] + "<br>链接30天内有效"
                                 });
                             });
                             layer.close(index);

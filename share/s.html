@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>文件分享</title>
+    <!--//手机端自适应-->
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <!--//手机端自适应-->
+    <script src="../js/jquery-3.2.1.min.js"></script>
+    <link href="../layui/css/layui.css" rel="stylesheet">
+    <link href="css/share_css.css" rel="stylesheet">
+    <script src="../layui/layui.js"></script>
+    <script>
+        //注意：导航 依赖 element 模块，否则无法进行功能性操作
+        layui.use('element', function () {
+            var element = layui.element;
+
+            //…
+        });
+
+        layui.use('layer', function () {
+            var form = layui.form;
+
+            //各种基于事件的操作，下面会有进一步介绍
+        });
+
+    </script>
+    <script>
+        //手机自适应
+        (function (doc, win) {
+            var docEl = doc.documentElement,
+                resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize',
+                recalc = function () {
+                    var clientWidth = docEl.clientWidth;
+                    if (!clientWidth) return;
+                    if (clientWidth >= 750) {
+
+                    } else {
+                        docEl.style.fontSize = '20px';
+                    }
+                };
+            if (!doc.addEventListener) return;
+            win.addEventListener(resizeEvt, recalc, false);
+            doc.addEventListener('DOMContentLoaded', recalc, false);
+        })(document, window);
+    </script>
+    <script>
+        //获取get请求
+        function GetRequest() {
+            var url = location.search; //获取url中"?"符后的字串
+            var theRequest = new Object();
+            if (url.indexOf("?") != -1) {
+                var str = url.substr(1);
+                strs = str.split("&");
+                for (var i = 0; i < strs.length; i++) {
+                    theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+                }
+            }
+            return theRequest;
+        }
+    </script>
+    <script>
+        var file_url = ""; //文件链接
+        window.onload = function () {
+            //获取file_code
+            var Request = new Object();
+            Request = GetRequest();
+            var file_code = Request['file_code'];
+            $.post("../API/file_information_query.php", {
+                "file_code": file_code
+            }, function (data) {
+                var file_information_json = $.parseJSON(data);
+                var share_user = file_information_json['share_user']; //分享用户
+                var file_name = file_information_json['file_name']; //文件名
+                file_name = file_name.substr(share_user.toString().length + 1);
+                document.getElementById("share_user_val").innerText = share_user;
+                document.getElementById("file_name").innerText = file_name;
+                file_url = file_information_json['file_url']; //文件URL
+                console.log(file_information_json);
+            })
+        }
+
+        function download() {
+            window.open(file_url);
+        }
+    </script>
+</head>
+<body>
+<ul class="layui-nav" lay-filter="">
+    <li class="layui-nav-item"><a href="http://cloud.zhfblog.ml/">Z-Cloud</a></li>
+    <li class="layui-nav-item layui-this">文件分享</li>
+    <li class="layui-nav-item"><a href="https://zhfhz.gitee.io/" target="_blank">作者博客</a></li>
+    <li class="layui-nav-item"><a href="https://zhfhz.gitee.io/2020/Z-Cloud%E4%BA%91%E7%9B%98/" target="_blank">关于云盘</a>
+    </li>
+</ul>
+<div id="main_box">
+    <div id="file_name">
+        NULL
+        <hr>
+    </div>
+    <div id="file_property">
+        <p id="file_size"><span class="file_property">文件大小：</span><span id="file_size_val">未知</span></>
+        <p id="share_user"><span class="file_property">分享用户：</span><span id="share_user_val">NULL</span></p>
+        <p id="file_describes"><span class="file_property">文件描述：</span><span id="file_describes_val">待开发</span></p>
+    </div>
+    <div id="file_operating">
+        <button class="layui-btn" onclick="download()">下载</button>
+        <button class="layui-btn" onclick="layer.msg('正在开发')">保存至我的Z盘</button>
+    </div>
+</div>
+</body>
+</html>

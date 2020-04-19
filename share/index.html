@@ -10,13 +10,13 @@
     <script>
         function run() {
             var file_code = document.getElementById("file_code").value;
-            $.post("../API/share_verify.php",{
-                "file_code":file_code
-            },function (data) {
+            $.post("../API/share_verify.php", {
+                "file_code": file_code
+            }, function (data) {
                 //找到HTTP头就返回文件URL：http://localhost/Z-Cloud/share/s.php?file_code=OKKO
-                if (data.toString().indexOf("http")!=-1){
+                if (data.toString().indexOf("http") != -1) {
                     window.open(data);
-                }else{
+                } else {
                     layer.msg(data);
                 }
             })
@@ -24,28 +24,43 @@
     </script>
 </head>
 <body style="background-color: #F2F2F2;">
-<div class="layui-card" style="width: 40%;margin:10% auto auto auto;box-shadow: 10px 10px 5px #888888;">
-    <div class="layui-card-header">请输入提取码</div>
-    <div class="layui-card-body">
-    <div>
-        <div class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
-            <div class="layui-form-item">
-                <label class="layui-form-label">提取码：</label>
-                <div class="layui-input-block">
-                    <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input" id="file_code">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="*" onclick="run()">立即提交</button>
-                   <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+<div class="videocontainer">
+    <video class="fullscreenvideo" id="bgvid" playsinline="" autoplay="" muted="" loop="">
+        <source src="https://web-1253780623.cos.ap-shanghai.myqcloud.com/video/2020_04_15_bg_1.mp4" type="video/mp4">
+    </video>
+</div>
+<ul class="layui-nav" lay-filter="">
+    <li class="layui-nav-item"><a href="http://cloud.zhfblog.ml/">Z-Cloud</a></li>
+    <li class="layui-nav-item layui-this">文件分享</li>
+    <li class="layui-nav-item"><a href="https://zhfhz.gitee.io/" target="_blank">作者博客</a></li>
+    <li class="layui-nav-item"><a href="https://zhfhz.gitee.io/2020/Z-Cloud%E4%BA%91%E7%9B%98/" target="_blank">关于云盘</a>
+    </li>
+</ul>
+<div class="layui-card"
+     style="width: 40%;margin:10% auto auto auto;background-color:rgba(169,67,32,0.2);box-shadow: 8px 8px 0px #B14F69;">
+    <div style="box-shadow: 4px 4px 4px #000000;z-index: -999">
+        <div class="layui-card-header" style="color: #ffffff">请输入提取码</div>
+        <div class="layui-card-body">
+            <div>
+                <div class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+                    <div class="layui-form-item">
+                        <label class="layui-form-label" style="color: #ffffff">提取码：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="" placeholder="请输入" autocomplete="off" class="layui-input"
+                                   id="file_code" style="background-color:rgba(169,67,32,0.2);color: #ffffff">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="*" onclick="run()">立即提交</button>
+                            <!-- <button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    </div>
 </div>
-
 <script>
     layui.use('form', function () {
         var form = layui.form;

@@ -161,7 +161,7 @@ require "./API/GetIP.php";
         <button type="button" onClick="zc()" id="register" name="register" class="btn btn-primary btn-block btn-large"
                 style="margin-top: 10px">注册
         </button>
-        <div style="color: white" onclick="retrieve_password()">找回密码</div>
+        <!--<div style="color: white" onclick="retrieve_password()">找回密码</div>-->
     </form>
 </div>
 </body>

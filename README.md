@@ -20,11 +20,10 @@ Z-Cloud云盘网页端
  ——咸鱼郑某
 #### 网盘介绍
 1.  这原本是高一高二写的一个东西，奈何水平太差，实在更新不下去了。得益于蝙蝠，于2020年春天又开始更新
-2.  秉承着能用就行的原则，写了许多奇葩的代码
 
 #### 使用说明
 
-1.  为了掩盖水平不足，我写了大量API接口都堆在API文件夹里，每个文档注释倒是挺全
+1. 我写了大量API接口都堆在API文件夹里
 2. config.php是配置文件，根据实际情况修改
 3. 在API文件夹中有个cos_sdk_config.php文件，把相应的secretId、secretKey、region、bucket替换掉就好
 4. 因为不想动腾讯的SDK，所以在cos-js-sdk-v5/server/sts.php里还需要改一遍secretId、secretKey、region、bucket
@@ -33,8 +32,9 @@ Z-Cloud云盘网页端
 2. 登录模块
 3. 用户模块
 4. 管理员模块
-文件列表：
-文件列表：
+5. 分享功能模块
+
+#### 文件列表
 ```
 │  config.php	//配置文件
 │  index.php	//主页
@@ -76,7 +76,9 @@ Z-Cloud云盘网页端
 │  │  cos_sdk_config.php	//初始化腾讯云COS
 │  │  del_file.php	//删除文件接口
 │  │  Email.php	//发送邮件接口
-│  │  file_sharing.php	//分享文件接口
+│  │  file_information_query.php    //在数据库中查询文件分享链接接口
+│  │  share_verify.php  //文件分享码验证
+│  │  file_sharing.php	//文件分享模块 + 网址缩短
 │  │  GetIP.php	//获取用户IP接口
 │  │  get_short_url.php	//获取短网址接口
 │  │  get_user_files_list.php	//h获取用户文件列表接口
@@ -92,6 +94,7 @@ Z-Cloud云盘网页端
 │  │  rsa_public_key.pem	//私钥
 │  │  select_user_files_list.php	//查询要用户文件（已废弃）
 │  │  Send_post.php	//发送POST请求
+│  │  share_verify.php  //文件分享码验证
 │  │
 │  └─mailer //邮件发送模块
 │  │文件夹不展开
@@ -113,34 +116,41 @@ Z-Cloud云盘网页端
 ├─layui	//layui框架
 │  │文件夹不展开
 └─user	//用户页面文件夹
-    │  index.php	//主页
+│   │  index.php	//主页
+│   │
+│   ├─css	//用户CSS文件夹
+│   │  │  dialog.css
+│   │  │  index.css
+│   │  │
+│   │  └─_notes
+│   ├─js	//用户JS文件夹
+│   │  │  app.js
+│   │  │  cos-auth.min.js
+│   │  │  cos-js-sdk-v5.js
+│   │  │  cos.js
+│   │  │  index.js
+│   │  │  indexjs.php
+│   │  │  lodash.core.min.js
+│   │  │  md5.js
+│   │  │  mDialogMin.js
+│   │  │  particles.min.js
+│   │  │  vue.min.js
+│   │  │
+│   │  └─_notes
+│   └─upload	//上传功能文件夹
+│            cos-auth.min.js
+│            upload.html
+│ 
+└─share //文件分享模块
+    │  index.html   //主页，输入提取码
+    │  s.html   //分享文件页
     │
-    ├─css	//用户CSS文件夹
-    │  │  dialog.css
-    │  │  index.css
-    │  │
-    │  └─_notes
-    ├─js	//用户JS文件夹
-    │  │  app.js
-    │  │  cos-auth.min.js
-    │  │  cos-js-sdk-v5.js
-    │  │  cos.js
-    │  │  index.js
-    │  │  indexjs.php
-    │  │  lodash.core.min.js
-    │  │  md5.js
-    │  │  mDialogMin.js
-    │  │  particles.min.js
-    │  │  vue.min.js
-    │  │
-    │  └─_notes
-    └─upload	//上传功能文件夹
-            cos-auth.min.js
-            upload.html
+    ├─css
+    │      share_css.css    //分享主页CSS
+    │
+    └─js
 
 ```
-#### 参与贡献
 
- 一个人写就是爽
 
 

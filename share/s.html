@@ -87,6 +87,11 @@
     </script>
 </head>
 <body>
+<div class="videocontainer">
+    <video class="fullscreenvideo" id="bgvid" playsinline="" autoplay="" muted="" loop="">
+        <source src="https://web-1253780623.cos.ap-shanghai.myqcloud.com/video/2020_04_15_bg_1.mp4" type="video/mp4">
+    </video>
+</div>
 <ul class="layui-nav" lay-filter="">
     <li class="layui-nav-item"><a href="http://cloud.zhfblog.ml/">Z-Cloud</a></li>
     <li class="layui-nav-item layui-this">文件分享</li>
@@ -95,14 +100,12 @@
     </li>
 </ul>
 <div id="main_box">
-    <div id="file_name">
-        NULL
-        <hr>
+    <div id="file_name" class="file_property_TXT">NULL<hr>
     </div>
     <div id="file_property">
-        <p id="file_size"><span class="file_property">文件大小：</span><span id="file_size_val">未知</span></>
-        <p id="share_user"><span class="file_property">分享用户：</span><span id="share_user_val">NULL</span></p>
-        <p id="file_describes"><span class="file_property">文件描述：</span><span id="file_describes_val">待开发</span></p>
+        <p id="file_size"><span class="file_property">文件大小：</span><span id="file_size_val" class="file_property_TXT">未知</span></>
+        <p id="share_user"><span class="file_property">分享用户：</span><span id="share_user_val" class="file_property_TXT">NULL</span></p>
+        <p id="file_describes"><span class="file_property">文件描述：</span><span id="file_describes_val" class="file_property_TXT">待开发</span></p>
     </div>
     <div id="file_operating">
         <button class="layui-btn" onclick="download()">下载</button>

@@ -120,6 +120,13 @@ function getGroup()
                     document.getElementById("IpAddress").innerHTML = t;
                 }
             );
+            //获取用户文件
+            get_user_files();
+        };
+    </script>
+    <script>
+        function get_user_files() {
+            //获取用户文件
             $.post("../API/get_user_files_list.php", {  //获取用户文件
                 "Token": getCookie("Token"),
                 "id": getCookie("id"),
@@ -142,10 +149,8 @@ function getGroup()
                 }
                 document.getElementById("files_list_box").innerHTML = files_list_box_html;
             })
-        };
+        }
 
-    </script>
-    <script>
         function file_operating(file_name) {
             //弹窗
             layui.use('layer', function () {
@@ -171,7 +176,7 @@ function getGroup()
                                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
                                 layer.msg(data);
-                                location.reload();
+                                get_user_files();
                             });
                             layer.close(index);
                         }, btn3: function (index) {
@@ -183,7 +188,8 @@ function getGroup()
                             }, function (data) {
                                 layer.open({
                                     title: '文件链接'
-                                    , content: $.parseJSON(data)['url'] + "<br>提取码：" + $.parseJSON(data)['file_code'] + "<br>链接30天内有效"
+                                    ,
+                                    content: $.parseJSON(data)['url'] + "<br>提取码：" + $.parseJSON(data)['file_code'] + "<br>链接30天内有效"
                                 });
                             });
                             layer.close(index);
@@ -192,27 +198,33 @@ function getGroup()
                 }
             )
         }
+
         function up() {
             layui.use('layer', function () {
                 layer.open({
                     type: 2,
                     area: [up_box_h, '30%'],
-                    content: ['./upload/upload.html', 'no'] //不出现滚动条
+                    content: ['./upload/upload.html', 'no'], //不出现滚动条
+                    end: function (index, layero) { //层销毁后回调
+                        layer.msg("上传完成");
+                        get_user_files(); //重新获取用户文件列表
+                    }
                 });
             });
         }
     </script>
-    <!-- 人物  CSS-->
+    <!-- 人物  CSS
     <link rel="stylesheet" href="https://model-1253780623.cos.ap-guangzhou.myqcloud.com/live2d/css/live2d.css"/>
+    -->
 </head>
 <body>
 <header>
     <div id="headName"><em>Z-Cloud</em></div>
     <div id="upload" onclick="up()">上传</div>
-    <div id="xhx"></div>
-    <div id="File_synchronization_time">文件同步时间：<span><?php echo(date("Y-m-d H:i:s")) ?></span><span
+    <!-- <div id="xhx"></div>
+  <div id="File_synchronization_time">登录时间：<span><?php echo(date("Y-m-d H:i:s")) ?></span><span
                 id="IpAddress"></span></div>
-    <div id="Time"></div>
+    <div id="Time"></div>-->
 </header>
 <!--第一列-->
 <div id="main_box">
@@ -228,7 +240,8 @@ function getGroup()
         </tbody>
     </table>
 </div>
-<!-- 人物 -->
+<!--
+live2D人物配置
 <div id="landlord">
     <div class="message" style="opacity:0"></div>
     <canvas id="live2d" width="280" height="300" class="live2d"></canvas>
@@ -260,6 +273,7 @@ function getGroup()
     });
     console.log("使用的贴图和模型：" + modelObj);
 </script>
+-->
 </body>
 
 </html>

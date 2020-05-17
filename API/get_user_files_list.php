@@ -19,26 +19,26 @@ if (time() - $time < 3600 and time() - $userTime < 5) {
         ## getObjectUrl(获取文件 UrL)
         try {
             $result = $cosClient->listObjects(array(
-                'Bucket' => $bucket
+                'Bucket' => $bucket,
+                'Prefix' => $id //用户目录
             ));
             // 请求成功
             if (isset($result['Contents'])) {
                 $index = 0;
                 $filesMessage = []; //初始化数组
                 foreach ($result['Contents'] as $rt) {
-                    if (substr($rt['Key'], 0, strlen($id)) == $id) {
-                        //因为$rt['Key']的格式是：文件夹/文件名
-                        //所以要获取用户文件夹中的文件名，就取用户名长度个$rt['Key']字符，判断是不是和用户名相等
+                    $id_folder = $id . "/"; //用户名不等于用户文件夹
+                    if ($rt['Key'] != $id_folder) {
                         $filesMessage[$index]['FilesName'] = $rt['Key'];
                         $filesMessage[$index]['FilesSize'] = $rt['Size'];
                         $filesMessage[$index]['LastModified'] = $rt['LastModified'];
                         $index++;
                     }
-
                 }
                 echo json_encode($filesMessage);
             }
-        } catch (\Exception $e) {
+        } catch
+        (\Exception $e) {
             // 请求失败
             echo($e);
         }

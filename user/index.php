@@ -6,7 +6,7 @@ global $SecretKey;
 global $group;  //定义全局变量
 $group = $_COOKIE['group'];
 $time = $_COOKIE['time'];    //获取传来的时间
-$username = $_COOKIE['id'];
+$username = $_COOKIE['user_id'];
 if (time() - $time < 3600) {      //判断时间
     $conn = mysqli_connect($MySqlHost, $MySqlUser, $MySqlPwd, $MySqlDatabaseName);
     $res = mysqli_query($conn, "SELECT * FROM users WHERE `user` = '$username' AND reg_confirm = 'yes'");
@@ -127,9 +127,9 @@ function getGroup()
     <script>
         function get_user_files() {
             //获取用户文件
-            $.post("../API/get_user_files_list.php", {  //获取用户文件
+            $.post("../API/get_user_files_list_db.php", {  //获取用户文件
                 "Token": getCookie("Token"),
-                "id": getCookie("id"),
+                "id": getCookie("user_id"),
                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳s
             }, function (data) {
                 var files_message_json = $.parseJSON(data);
@@ -138,12 +138,13 @@ function getGroup()
                 for (var i = 0; i < files_lenght; i++) {
                     var file_name = decodeURI(files_message_json[i]['FilesName']); //文件名URL解码
                     var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
-                    var fiel_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
+                    //var file_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
+                    var file_key = files_message_json[i]['FilesKey'];
                     files_list_box_html = files_list_box_html + " <tr>" +
                         "            <td onclick='file_operating(this.value)' value='" + file_name + "'>" + file_name + "</td>" +
                         "            <td>" + file_size.toFixed(2).toString() + "MB" + "</td>" +
                         "            <td>" +
-                        "                <button class='layui-btn' style='float: left' onclick='file_operating(this.value)' value='" + file_name + "' >文件操作</button>" +
+                        "                <button class='layui-btn' style='float: left' onclick='file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")' value='" + file_name + "' >文件操作</button>" +
                         "            </td>" +
                         "        </tr>"
                 }
@@ -151,28 +152,30 @@ function getGroup()
             })
         }
 
-        function file_operating(file_name) {
+        function file_operating(file_name, file_key, file_size) {
             //弹窗
             layui.use('layer', function () {
                     layer.confirm('请选择操作？', {
                         btn: ['下载', '删除', '分享']
                         , btn1: function (index) {
                             //  文件操作
-                            //按钮【按钮一】的回调
-                            $.post("../API/git_file_url.php", {
+                            //按钮：下载
+                            $.post("../API/git_file_url_db.php", {
                                 "file_name": file_name,
                                 "Token": getCookie("Token"),
-                                "id": getCookie("id"),
+                                "id": getCookie("user_id"),
+                                "file_key": file_key,
                                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
                                 window.open(data);
                                 layer.close(index);
                             })
                         }, btn2: function (index) {
-                            $.post("../API/del_file.php", {
+                            $.post("../API/del_file_db.php", {
                                 "file_name": file_name,
                                 "Token": getCookie("Token"),
-                                "id": getCookie("id"),
+                                "id": getCookie("user_id"),
+                                "file_key": file_key,
                                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
                                 layer.msg(data);
@@ -181,9 +184,9 @@ function getGroup()
                             layer.close(index);
                         }, btn3: function (index) {
                             $.post("../API/file_sharing.php", {
-                                "file_name": file_name,
                                 "Token": getCookie("Token"),
-                                "id": getCookie("id"),
+                                "id": getCookie("user_id"),
+                                "file_key": file_key,
                                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
                                 layer.open({

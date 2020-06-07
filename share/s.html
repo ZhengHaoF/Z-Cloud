@@ -61,7 +61,8 @@
         }
     </script>
     <script>
-        var file_url = ""; //文件链接
+        var file_name = "";
+        var file_key = ""; //文件MD5
         window.onload = function () {
             //获取file_code
             var Request = new Object();
@@ -72,17 +73,23 @@
             }, function (data) {
                 var file_information_json = $.parseJSON(data);
                 var share_user = file_information_json['share_user']; //分享用户
-                var file_name = file_information_json['file_name']; //文件名
-                file_name = file_name.substr(share_user.toString().length + 1);
+                file_name = file_information_json['file_name']; //文件名
+                var file_size = file_information_json['file_size']; //文件大小
                 document.getElementById("share_user_val").innerText = share_user;
-                document.getElementById("file_name").innerText = file_name;
-                file_url = file_information_json['file_url']; //文件URL
+                document.getElementById("file_name_val").innerText = file_name;
+                document.getElementById("file_size_val").innerText = Math.floor(file_size/1024/1024*100)/100 + " MB" ;
+                file_key = file_information_json['file_key']; //文件MD5
                 console.log(file_information_json);
             })
         }
 
         function download() {
-            window.open(file_url);
+            $.post("../API/share_get_url.php",{
+                "file_key":file_key,
+                "file_name":file_name
+            },function (data) {
+                window.open(data)
+            })
         }
     </script>
 </head>
@@ -100,7 +107,7 @@
     </li>
 </ul>
 <div id="main_box">
-    <div id="file_name" class="file_property_TXT">NULL<hr>
+    <div id="file_name_val" class="file_property_TXT">NULL<hr>
     </div>
     <div id="file_property">
         <p id="file_size"><span class="file_property">文件大小：</span><span id="file_size_val" class="file_property_TXT">未知</span></>

@@ -16,7 +16,7 @@
 					$num = mysqli_num_rows($res); //统计个数
 					if($num>0){
 						setcookie("time",time()+5,time()+3600,"/"); //设置cookie全路径
-						setcookie("id",$username,time()+3600,"/"); //设置cookie全路径
+						setcookie("user_id",$username,time()+3600,"/"); //设置cookie全路径
 						//mysql_close($conn);  //关闭连接
 						$group = mysqli_fetch_row($res)[3];//查询用户组
 						setcookie("group",md5($group),time()+3600,"/");//储存用户权限cookie,加密

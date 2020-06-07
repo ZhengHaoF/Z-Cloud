@@ -1,10 +1,12 @@
 <!doctype html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <title>上传</title>
     <style>
-        h1, h2 {
+        h1,
+        h2 {
             font-weight: normal;
         }
 
@@ -16,10 +18,14 @@
     <link href="../../layui/css/layui.css" rel="stylesheet">
     <script src="../../layui/layui.js"></script>
     <script src="./cos-auth.min.js"></script>
+    <script src="./js-md5.js"></script>
+    <!--计算MD5的JS-->
 </head>
+
 <body>
 <div style="left: 10%;position: absolute;width: 90%">
-    <input id="fileSelector" type="file" style="width: 90%;height: 40px;border: #00CC66 solid 2px;font-size: 30px"><br>
+    <input id="fileSelector" type="file"
+           style="width: 90%;height: 40px;border: #00CC66 solid 2px;font-size: 30px"><br>
     <button id="submitBtn" class="layui-btn" style="width: 90%;margin: 10px auto 0 auto">开始上传</button>
     <div id="msg"></div>
     <div class="layui-progress layui-progress-big" lay-filter="progress" style="width: 90%;">
@@ -29,138 +35,213 @@
 </div>
 
 <script>
-    //获取COOKIE
-    function getCookie(cookie_name) {
-        var allcookies = document.cookie;
-        //索引长度，开始索引的位置
-        var cookie_pos = allcookies.indexOf(cookie_name);
+    var file_key = "";
+    layui.use('layer', function () {
+        //获取COOKIE
+        function getCookie(cookie_name) {
+            var allcookies = document.cookie;
+            //索引长度，开始索引的位置
+            var cookie_pos = allcookies.indexOf(cookie_name);
 
-        // 如果找到了索引，就代表cookie存在,否则不存在
-        if (cookie_pos != -1) {
-            // 把cookie_pos放在值的开始，只要给值加1即可
-            //计算取cookie值得开始索引，加的1为“=”
-            cookie_pos = cookie_pos + cookie_name.length + 1;
-            //计算取cookie值得结束索引
-            var cookie_end = allcookies.indexOf(";", cookie_pos);
+            // 如果找到了索引，就代表cookie存在,否则不存在
+            if (cookie_pos != -1) {
+                // 把cookie_pos放在值的开始，只要给值加1即可
+                //计算取cookie值得开始索引，加的1为“=”
+                cookie_pos = cookie_pos + cookie_name.length + 1;
+                //计算取cookie值得结束索引
+                var cookie_end = allcookies.indexOf(";", cookie_pos);
 
-            if (cookie_end == -1) {
-                cookie_end = allcookies.length;
+                if (cookie_end == -1) {
+                    cookie_end = allcookies.length;
 
+                }
+                //得到想要的cookie的值
+                var value = unescape(allcookies.substring(cookie_pos, cookie_end));
             }
-            //得到想要的cookie的值
-            var value = unescape(allcookies.substring(cookie_pos, cookie_end));
+            return value;
         }
-        return value;
-    }
 
-    (function () {
-        // 请求用到的参数
-        var Bucket = 'z-cloud-1253780623';
-        var Region = 'ap-shanghai';
-        var protocol = location.protocol === 'https:' ? 'https:' : 'http:';
-        var prefix = protocol + '//' + Bucket + '.cos.' + Region + '.myqcloud.com/';
+        (function () {
+            // 请求用到的参数
+            var Bucket = 'z-cloud-1253780623';
+            var Region = 'ap-shanghai';
+            var protocol = location.protocol === 'https:' ? 'https:' : 'http:';
+            var prefix = protocol + '//' + Bucket + '.cos.' + Region + '.myqcloud.com/';
 
-        // 对更多字符编码的 url encode 格式
-        var camSafeUrlEncode = function (str) {
-            return encodeURIComponent(str)
-                .replace(/!/g, '%21')
-                .replace(/'/g, '%27')
-                .replace(/\(/g, '%28')
-                .replace(/\)/g, '%29')
-                .replace(/\*/g, '%2A');
-        };
-
-        // 计算签名
-        var getAuthorization = function (options, callback) {
-            // var url = 'http://127.0.0.1:3000/sts-auth';
-            var url = '../../cos-js-sdk-v5/server/sts.php';
-            var xhr = new XMLHttpRequest();
-            xhr.open('GET', url, true);
-            xhr.onload = function (e) {
-                var credentials;
-                try {
-                    credentials = (new Function('return ' + xhr.responseText))().credentials;
-                } catch (e) {
-                }
-                if (credentials) {
-                    callback(null, {
-                        XCosSecurityToken: credentials.sessionToken,
-                        Authorization: CosAuth({
-                            SecretId: credentials.tmpSecretId,
-                            SecretKey: credentials.tmpSecretKey,
-                            Method: options.Method,
-                            Pathname: options.Pathname,
-                        })
-                    });
-                } else {
-                    console.error(xhr.responseText);
-                    callback('获取签名出错');
-                }
+            // 对更多字符编码的 url encode 格式
+            var camSafeUrlEncode = function (str) {
+                return encodeURIComponent(str)
+                    .replace(/!/g, '%21')
+                    .replace(/'/g, '%27')
+                    .replace(/\(/g, '%28')
+                    .replace(/\)/g, '%29')
+                    .replace(/\*/g, '%2A');
             };
-            xhr.onerror = function (e) {
-                callback('获取签名出错');
-            };
-            xhr.send();
-        };
 
-        // 上传文件
-        var uploadFile = function (file, callback) {
-            var Key = getCookie("id") + "/" + file.name; // 这里指定上传目录和文件名
-            getAuthorization({Method: 'PUT', Pathname: '/' + Key}, function (err, info) {
-
-                if (err) {
-                    alert(err);
-                    return;
-                }
-
-                var auth = info.Authorization;
-                var XCosSecurityToken = info.XCosSecurityToken;
-                var url = prefix + camSafeUrlEncode(Key).replace(/%2F/g, '/');
+            // 计算签名
+            var getAuthorization = function (options, callback) {
+                // var url = 'http://127.0.0.1:3000/sts-auth';
+                var url = '../../cos-js-sdk-v5/server/sts.php';
                 var xhr = new XMLHttpRequest();
-                xhr.open('PUT', url, true);
-                xhr.setRequestHeader('Authorization', auth);
-                XCosSecurityToken && xhr.setRequestHeader('x-cos-security-token', XCosSecurityToken);
-                xhr.upload.onprogress = function (e) {
-                    console.log('上传进度 ' + (Math.round(e.loaded / e.total * 10000) / 100) + '%');
-                    var rate = (Math.round(e.loaded / e.total * 10000) / 100) + '%'
-                    layui.use('element', function () {
-                        var element = layui.element;
-                        element.progress('progress', rate); //改变滚动条大小
-                    });
-                };
-                xhr.onload = function () {
-                    if (xhr.status === 200 || xhr.status === 206) {
-                        var ETag = xhr.getResponseHeader('etag');
-                        callback(null, {url: url, ETag: ETag});
+                xhr.open('GET', url, true);
+                xhr.onload = function (e) {
+                    var credentials;
+                    try {
+                        credentials = (new Function('return ' + xhr.responseText))().credentials;
+                    } catch (e) {
+                    }
+                    if (credentials) {
+                        callback(null, {
+                            XCosSecurityToken: credentials.sessionToken,
+                            Authorization: CosAuth({
+                                SecretId: credentials.tmpSecretId,
+                                SecretKey: credentials.tmpSecretKey,
+                                Method: options.Method,
+                                Pathname: options.Pathname,
+                            })
+                        });
                     } else {
-                        callback('文件 ' + Key + ' 上传失败，状态码：' + xhr.status);
+                        console.error(xhr.responseText);
+                        callback('获取签名出错');
                     }
                 };
-                xhr.onerror = function () {
-                    callback('文件 ' + Key + ' 上传失败，请检查是否没配置 CORS 跨域规则');
+                xhr.onerror = function (e) {
+                    callback('获取签名出错');
                 };
-                xhr.send(file);
-            });
-        };
+                xhr.send();
+            };
 
-        // 监听表单提交
-        document.getElementById('submitBtn').onclick = function (e) {
-            var file = document.getElementById('fileSelector').files[0];
-            if (!file) {
-                document.getElementById('msg').innerText = '未选择上传文件';
-                return;
-            }
-            file && uploadFile(file, function (err, data) {
-                console.log(err || data);
-                layui.use('layer', function () {
-                    //layer.msg('上传成功,请刷新网页查看');
-                    //iframe弹窗关闭自身
-                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
-                    parent.layer.close(index); //再执行关闭
+            // 上传文件
+            var uploadFile = function (file, callback) {
+
+                //var Key = getCookie("id") + "/" + file.name; // 这里指定上传目录和文件名
+                var Key = file_key; //文件名为MD5
+                getAuthorization({Method: 'PUT', Pathname: '/' + Key}, function (err, info) {
+
+                    if (err) {
+                        alert(err);
+                        return;
+                    }
+
+                    var auth = info.Authorization;
+                    var XCosSecurityToken = info.XCosSecurityToken;
+                    var url = prefix + camSafeUrlEncode(Key).replace(/%2F/g, '/');
+                    var xhr = new XMLHttpRequest();
+                    xhr.open('PUT', url, true);
+                    xhr.setRequestHeader('Authorization', auth);
+                    XCosSecurityToken && xhr.setRequestHeader('x-cos-security-token', XCosSecurityToken);
+                    xhr.upload.onprogress = function (e) {
+                        console.log('上传进度 ' + (Math.round(e.loaded / e.total * 10000) / 100) + '%');
+                        var rate = (Math.round(e.loaded / e.total * 10000) / 100) + '%'
+                        layui.use('element', function () {
+                            var element = layui.element;
+                            element.progress('progress', rate); //改变滚动条大小
+                        });
+                    };
+                    xhr.onload = function () {
+                        if (xhr.status === 200 || xhr.status === 206) {
+                            var ETag = xhr.getResponseHeader('etag');
+                            callback(null, {url: url, ETag: ETag});
+                        } else {
+                            callback('文件 ' + Key + ' 上传失败，状态码：' + xhr.status);
+                        }
+                    };
+                    xhr.onerror = function () {
+                        callback('文件 ' + Key + ' 上传失败，请检查是否没配置 CORS 跨域规则');
+                    };
+                    xhr.send(file);
                 });
-            });
-        };
-    })();
+            };
+
+            // 监听表单提交
+            document.getElementById('submitBtn').onclick = function (e) {
+                //查询能否秒传
+                var file = document.getElementById('fileSelector').files[0];
+                var index_iframe = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                var file_size = file.size; //文件大小，单位B
+                var user_name = getCookie("user_id");
+                $.post("../../API/upload_a_pass.php", {
+                    //参数：o_key :操作码，file_name：文件名，file_key：文件MD5，file_size：文件大小
+                    "o_key": "select",
+                    "file_name": file.name,
+                    "file_key": file_key,
+                    "user_name": user_name,
+                    "file_size": file_size
+                }, function (data) {
+                    console.log(data)
+                    if ($.parseJSON(data)['msg'] == "") {
+                        //非空为文件不存在
+                        if (!file) {
+                            document.getElementById('msg').innerText = '未选择上传文件';
+                            return;
+                        }
+                        file && uploadFile(file, function (err, data) {
+                            console.log(err || data);
+                            layui.use('layer', function () {
+                                //layer.msg('上传成功,请刷新网页查看');
+                                //iframe弹窗关闭自身
+                                parent.layer.close(index_iframe); //再执行关闭
+                            });
+                        });
+                    } else {
+                        //文件已存在
+                        //直接关闭网页
+                        layer.msg("秒传")
+                        parent.layer.close(index_iframe); //再执行关闭
+                    }
+                    //不管能不能秒传都要进行这个操作
+                    $.post("../../API/upload_a_pass.php", {
+                        //参数：o_key :操作码，file_name：文件名，file_key：文件MD5，file_size：文件大小
+                        "o_key": "add",
+                        "file_name": file.name,
+                        "file_key": file_key,
+                        "user_name": user_name,
+                        "file_size": file_size
+                    }, function (data) {
+                        console.log(data)
+                    });
+                })
+            };
+        })();
+        //获取文件MD5值
+
+        var layer = layui.layer;
+        var log = document.getElementById("fileSelector");
+        document.getElementById("fileSelector").addEventListener("change", function () {
+            var index = layer.load();
+            var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
+                file = this.files[0],
+                chunkSize = 2097152, // read in chunks of 2MB
+                chunks = Math.ceil(file.size / chunkSize),
+                currentChunk = 0,
+                spark = new SparkMD5.ArrayBuffer(),
+                frOnload = function (e) {
+                    //  log.innerHTML+="\nread chunk number "+parseInt(currentChunk+1)+" of "+chunks;
+                    spark.append(e.target.result); // append array buffer
+                    currentChunk++;
+                    if (currentChunk < chunks) {
+                        loadNext();
+                    } else {
+                        layer.close(index);
+                        file_key = spark.end()
+                    }
+                },
+                frOnerror = function () {
+                    log.innerHTML += "err";
+                };
+
+            function loadNext() {
+                var fileReader = new FileReader();
+                fileReader.onload = frOnload;
+                fileReader.onerror = frOnerror;
+                var start = currentChunk * chunkSize,
+                    end = ((start + chunkSize) >= file.size) ? file.size : start + chunkSize;
+                fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
+            };
+            loadNext();
+        });
+    });
 </script>
 </body>
+
 </html>

@@ -153,20 +153,6 @@
                 });
             };
 
-            function add_file(){
-                //添加文件到数据库
-                //不管能不能秒传都要进行这个操作
-                $.post("../../API/upload_a_pass.php", {
-                    //参数：o_key :操作码，file_name：文件名，file_key：文件MD5，file_size：文件大小
-                    "o_key": "add",
-                    "file_name": file.name,
-                    "file_key": file_key,
-                    "user_name": user_name,
-                    "file_size": file_size
-                }, function (data) {
-                    console.log(data)
-                });
-            }
             // 监听表单提交
             document.getElementById('submitBtn').onclick = function (e) {
                 //查询能否秒传
@@ -193,18 +179,41 @@
                             console.log(err || data);
                             layui.use('layer', function () {
                                 //layer.msg('上传成功,请刷新网页查看');
-                                //iframe弹窗关闭自身
-                                add_file();
-                                parent.layer.close(index_iframe); //再执行关闭
+                                //不管能不能秒传都要进行这个操作
+                                $.post("../../API/upload_a_pass.php", {
+                                    //参数：o_key :操作码，file_name：文件名，file_key：文件MD5，file_size：文件大小
+                                    "o_key": "add",
+                                    "file_name": file.name,
+                                    "file_key": file_key,
+                                    "user_name": user_name,
+                                    "file_size": file_size
+                                }, function (data) {
+                                    console.log(data)
+                                    //iframe弹窗关闭自身
+                                    parent.layer.close(index_iframe); //再执行关闭
+                                });
                             });
                         });
                     } else {
                         //文件已存在
                         //直接关闭网页
-                        layer.msg("秒传")
-                        add_file();
-                        parent.layer.close(index_iframe); //再执行关闭
+                        //不管能不能秒传都要进行这个操作
+                        $.post("../../API/upload_a_pass.php", {
+                            //参数：o_key :操作码，file_name：文件名，file_key：文件MD5，file_size：文件大小
+                            "o_key": "add",
+                            "file_name": file.name,
+                            "file_key": file_key,
+                            "user_name": user_name,
+                            "file_size": file_size
+                        }, function (data) {
+                            console.log(data)
+                            //iframe弹窗关闭自身
+                            layer.msg("秒传")
+                            parent.layer.close(index_iframe); //再执行关闭
+                        });
+
                     }
+
                 })
             };
         })();

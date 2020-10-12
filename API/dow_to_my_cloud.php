@@ -2,11 +2,12 @@
 //文件转存到我的网盘
 require "./RSA_decode.php"; //引入加密PHP
 require "../config.php";
+require "./file_ground.php";
 $TokenJson = RSA_decode($_POST['Token']);
 $id = $_POST['user_id']; //用户名
 $Token = json_decode($TokenJson, true); //true是让这个傻逼东西返回将返回 array 而非 object 。妈的好端端要返回对象，老子搞一天
 $file_name = $_POST['file_name']; //文件名
-$file_key = $_POST['file_key']; //文件MD5
+$file_key = $_POST['file_key']; //文件MD5   
 $pwd = $Token['pwd']; //获取密码MD5
 $time = $Token['time'];//获取时间
 $userTime = $_POST['userTime']; //用户提交请求时的时间,这个设计有问题，有时间要改，用户采用RC4来加密才行
@@ -28,17 +29,17 @@ if (time() - $time < 3600 and time() - $userTime < 5) {
             $dow_file_key = $r['file_key'];
             $dow_file_name = $r['file_name'];
             $dow_file_size = $r['file_size'];
-            $r = mysqli_query($conn,"INSERT INTO user_files (user_id,file_name,file_key,file_size) VALUES ('$id','$dow_file_name','dow_$file_key','$dow_file_size')");
+            $r = add_file_key_in_db($conn,$id, $dow_file_name,$dow_file_key ,$dow_file_size);
             if($r){
                 echo "转存完成";
             }
             }else{
                 echo "文件已存在";
             }
-
+            
         }else{
             echo "文件不存在或已被删除";
-        }
+        }   
     } else {
         echo "<script>alert('用户不存在')</script>";
         echo $id;

@@ -59,6 +59,44 @@
             }
             return theRequest;
         }
+        //获取cookie
+        function getCookie(name)
+        {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+            if(arr=document.cookie.match(reg))
+                return unescape(arr[2]);
+            else
+                return null;
+        }
+
+        function dow_to_my_cloud(id){
+            console.log(id)
+            if(id != null){
+                var Token = getCookie('Token');
+                var time = getCookie('time');
+                var user_id = getCookie('user_id');
+                $.post("../API/dow_to_my_cloud.php",{
+                    "Token":Token,
+                    "time":time,
+                    "user_id": user_id,
+                    "file_name":file_name,
+                    "file_key":file_key,
+                    "userTime":(new Date()).getTime()
+                },function(data){
+                    layer.open({
+                        title: '完成',
+                        content: data
+                    }); 
+                })
+                
+            }else{
+                layer.open({
+                    title: '未登录',
+                    content: '请先登录'
+                });  
+            }
+
+        }
     </script>
     <script>
         var file_name = "";
@@ -116,7 +154,7 @@
     </div>
     <div id="file_operating">
         <button class="layui-btn" onclick="download()">下载</button>
-        <button class="layui-btn" onclick="layer.msg('正在开发')">保存至我的Z盘</button>
+        <button class="layui-btn" onclick="dow_to_my_cloud(getCookie('user_id'))">保存至我的Z盘</button>
     </div>
 </div>
 </body>

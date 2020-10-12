@@ -156,7 +156,7 @@ function getGroup()
             //弹窗
             layui.use('layer', function () {
                     layer.confirm('请选择操作？', {
-                        btn: ['下载', '删除', '分享']
+                        btn: ['下载', '删除', '分享','在线播放']
                         , btn1: function (index) {
                             //  文件操作
                             //按钮：下载
@@ -195,6 +195,22 @@ function getGroup()
                                     content: $.parseJSON(data)['url'] + "<br>提取码：" + $.parseJSON(data)['file_code'] + "<br>链接30天内有效"
                                 });
                             });
+                            layer.close(index);
+                        }, btn4: function (index) {                            //按钮：下载
+                            $.post("../API/git_file_url_db.php", {
+                                "file_name": file_name,
+                                "Token": getCookie("Token"),
+                                "id": getCookie("user_id"),
+                                "file_key": file_key,
+                                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
+                            }, function (data) {
+                                console.log(data)
+                                vod_url = "../API/to_player.html?vod_url=" + window.encodeURI(window.btoa(data));
+                                console.log(vod_url)
+                                window.open(vod_url);
+                                layer.close(index);
+                            })
+
                             layer.close(index);
                         }
                     });

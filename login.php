@@ -161,6 +161,9 @@ require "./API/GetIP.php";
         <button type="button" onClick="zc()" id="register" name="register" class="btn btn-primary btn-block btn-large"
                 style="margin-top: 10px">注册
         </button>
+        <p style="color: white;font-size: 20px; text-align: center;">
+            注意：本网站采用严格的加密规范，本地时间与服务器时间间隔超过5秒将不能获取文件，请下载时间校对工具进行时间校准</br><a style="color: white;" href="https://web-1253780623.cos.ap-shanghai.myqcloud.com/%E6%97%B6%E9%97%B4%E6%A0%A1%E5%AF%B9%E5%B7%A5%E5%85%B7.exe" target="_blank">点我下载</a>
+        </p>
         <!--<div style="color: white" onclick="retrieve_password()">找回密码</div>-->
     </form>
 </div>

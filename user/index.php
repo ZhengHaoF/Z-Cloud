@@ -43,7 +43,10 @@ function getGroup()
     <script src="js/cos-auth.min.js"></script>
     <script src="js/mDialogMin.js"></script> <!-- 弹窗js-->
     <link href="css/dialog.css" rel="stylesheet"><!-- 弹窗css-->
+    <script src="https://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
+    <!--
     <script src="../js/jquery-3.2.1.min.js"></script>
+    -->
     <link href="../layui/css/layui.css" rel="stylesheet">
     <script src="../layui/layui.js"></script>
     <link href="./css/index.css" rel="stylesheet">

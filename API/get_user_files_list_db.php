@@ -9,7 +9,7 @@ $Token = json_decode($TokenJson, true); //true是让这个傻逼东西返回将�
 $pwd = $Token['pwd']; //获取密码MD5
 $time = $Token['time'];//获取时间
 $userTime = $_POST['userTime']; //用户提交请求时的时间,这个设计有问题，有时间要改，用户采用RC4来加密才行
-if (time() - $time < 3600 and time() - $userTime < 5) {
+if (time() - $time < 3600 and time() - $userTime < 50) {
     $conn = mysqli_connect($MySqlHost, $MySqlUser, $MySqlPwd, $MySqlDatabaseName);
     mysqli_query($conn, "set character set 'utf8'");//读库
     mysqli_query($conn, "set names 'utf8'");//写库
@@ -35,6 +35,5 @@ if (time() - $time < 3600 and time() - $userTime < 5) {
         echo $id;
     }
 } else {
-    echo "<script>alert('非法请求')</script>";
-    echo time() - $time;
+    echo time() - $time . "连接超时";
 }

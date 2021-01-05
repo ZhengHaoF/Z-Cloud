@@ -113,7 +113,7 @@ function getGroup()
             }*/
             //获取IP
             var ip = "<?php getIp() ?>";
-            $.get("http://api.online-service.vip/ip3",
+            $.get("https://www.36ip.cn/?ip=",
                 {
                     ip: ip,
                 },
@@ -121,6 +121,7 @@ function getGroup()
                     var As = data.data;//获取json数组
                     t = "&nbsp&nbsp您的IP" + ip + "&nbsp" + As.province + As.city + As.isp;//获取省，市，运营商
                     document.getElementById("IpAddress").innerHTML = t;
+                    console.log(data);
                 }
             );
             //获取用户文件
@@ -142,16 +143,46 @@ function getGroup()
                     var file_name = decodeURI(files_message_json[i]['FilesName']); //文件名URL解码
                     var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
                     //var file_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
-                    var file_key = files_message_json[i]['FilesKey'];
-                    files_list_box_html = files_list_box_html + " <tr>" +
+
+                    var file_key = files_message_json[i]['FilesKey']; //文件的KEY
+
+                    var file_list_tr = document.createElement('tr');
+                    var file_list_td = document.createElement('td');
+                    file_list_td.setAttribute("onclick","file_operating(this.value)");
+                    file_list_td.setAttribute("value",file_name);
+                    file_list_td.innerHTML = file_name;
+                    file_list_tr.appendChild(file_list_td);
+                    file_list_td = document.createElement('td');
+                    file_list_td.innerHTML = file_size.toFixed(2).toString() + "MB";
+                    file_list_tr.appendChild(file_list_td);
+                    file_list_td = document.createElement('td');
+                    file_list_tr.appendChild(file_list_td);
+                    var file_list_button = document.createElement("button");
+                    file_list_button.innerText = "文件操作";
+                    file_list_button.className = "layui-btn";
+                    file_list_button.style.float="left"
+                    file_list_button.setAttribute("onclick","file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")")
+                    file_list_button.setAttribute("value",file_name)
+                    file_list_td.appendChild(file_list_button);
+                    file_list_tr.appendChild(file_list_td);
+                    document.getElementById("files_list_box").appendChild(file_list_tr);
+
+
+
+                    
+/*
+                                        files_list_box_html = files_list_box_html + " <tr>" +
                         "            <td onclick='file_operating(this.value)' value='" + file_name + "'>" + file_name + "</td>" +
                         "            <td>" + file_size.toFixed(2).toString() + "MB" + "</td>" +
                         "            <td>" +
                         "                <button class='layui-btn' style='float: left' onclick='file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")' value='" + file_name + "' >文件操作</button>" +
                         "            </td>" +
                         "        </tr>"
+*/
                 }
-                document.getElementById("files_list_box").innerHTML = files_list_box_html;
+
+                //document.getElementById("files_list_box").innerHTML = files_list_box_html;
+                
             })
         }
 
@@ -159,7 +190,7 @@ function getGroup()
             //弹窗
             layui.use('layer', function () {
                     layer.confirm('请选择操作？', {
-                        btn: ['下载', '删除', '分享','在线播放']
+                        btn: ['下载', '删除', '分享','在线播放','文件预览（测试）']
                         , btn1: function (index) {
                             //  文件操作
                             //按钮：下载
@@ -215,6 +246,24 @@ function getGroup()
                             })
 
                             layer.close(index);
+                        },btn5: function (index) {
+                            $.post("../API/git_file_url_db.php", {
+                                "file_name": file_name,
+                                "Token": getCookie("Token"),
+                                "id": getCookie("user_id"),
+                                "file_key": file_key,
+                                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
+                            }, function (url_data) {
+                                $.get(url_data, function(str){
+                                    layer.open({
+                                        type: 1,
+                                        content:str,
+                                        offset: 'auto',
+                                        area: ['60%', '70%'],
+                                        title:"文件预览"
+                                    });
+                                });
+                            })                           
                         }
                     });
                 }

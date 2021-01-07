@@ -139,6 +139,10 @@ function getGroup()
                 var files_message_json = $.parseJSON(data);
                 var files_lenght = files_message_json.length;
                 var files_list_box_html = ""; //要加载的HTML文档
+				//清空文件列表
+				if(document.getElementById("files_list_box").childNodes.length!=1){
+						document.getElementById("files_list_box").innerHTML = "";
+				}
                 for (var i = 0; i < files_lenght; i++) {
                     var file_name = decodeURI(files_message_json[i]['FilesName']); //文件名URL解码
                     var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
@@ -190,7 +194,8 @@ function getGroup()
             //弹窗
             layui.use('layer', function () {
                     layer.confirm('请选择操作？', {
-                        btn: ['下载', '删除', '分享','在线播放','文件预览（测试）']
+                        //btn: ['下载', '删除', '分享','在线播放','文件预览（测试）','PDF预览（测试）','文件预览']
+                        btn: ['下载', '删除', '分享','文件预览（测试）']
                         , btn1: function (index) {
                             //  文件操作
                             //按钮：下载
@@ -205,6 +210,7 @@ function getGroup()
                                 layer.close(index);
                             })
                         }, btn2: function (index) {
+                            //删除
                             $.post("../API/del_file_db.php", {
                                 "file_name": file_name,
                                 "Token": getCookie("Token"),
@@ -217,6 +223,7 @@ function getGroup()
                             });
                             layer.close(index);
                         }, btn3: function (index) {
+                            //分享
                             $.post("../API/file_sharing.php", {
                                 "Token": getCookie("Token"),
                                 "id": getCookie("user_id"),
@@ -224,29 +231,12 @@ function getGroup()
                                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (data) {
                                 layer.open({
-                                    title: '文件链接'
-                                    ,
+                                    title: '文件链接',
                                     content: $.parseJSON(data)['url'] + "<br>提取码：" + $.parseJSON(data)['file_code'] + "<br>链接30天内有效"
                                 });
                             });
                             layer.close(index);
-                        }, btn4: function (index) {                            //按钮：下载
-                            $.post("../API/git_file_url_db.php", {
-                                "file_name": file_name,
-                                "Token": getCookie("Token"),
-                                "id": getCookie("user_id"),
-                                "file_key": file_key,
-                                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
-                            }, function (data) {
-                                console.log(data)
-                                vod_url = "../API/to_player.html?vod_url=" + window.encodeURI(window.btoa(data));
-                                console.log(vod_url)
-                                window.open(vod_url);
-                                layer.close(index);
-                            })
-
-                            layer.close(index);
-                        },btn5: function (index) {
+                        },btn4: function (index) {
                             $.post("../API/git_file_url_db.php", {
                                 "file_name": file_name,
                                 "Token": getCookie("Token"),
@@ -254,15 +244,44 @@ function getGroup()
                                 "file_key": file_key,
                                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
                             }, function (url_data) {
-                                $.get(url_data, function(str){
+                                var suffix = file_name.substring(file_name.lastIndexOf(".")+1).toLocaleUpperCase();//文件后缀
+                                console.log(suffix);
+                                if(suffix == "EXE"){
+                                    layer.msg("该文件不支持预览");
+                                }else if(suffix == "PDF"){
+                                    //PDF处理
                                     layer.open({
-                                        type: 1,
-                                        content:str,
+                                        title:file_name,
                                         offset: 'auto',
                                         area: ['60%', '70%'],
-                                        title:"文件预览"
+                                        type: 2, 
+                                        content: "../API/pdf_read/web/viewer.html?file=" + url_data + "#page=1" //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                                        });
+                                }else if(suffix == "TXT"){
+                                    $.get(url_data, function(str){
+                                        layer.open({
+                                            type: 1,
+                                            content:str,
+                                            offset: 'auto',
+                                            area: ['60%', '70%'],
+                                            title:file_name
+                                        });
                                     });
-                                });
+                                }else if(suffix == "MP4"){
+                                    //视频预览
+                                    console.log(url_data)
+                                    vod_url = "../API/to_player.html?vod_url=" + window.encodeURI(window.btoa(url_data));
+                                    console.log(vod_url)
+                                    layer.open({
+                                        title:file_name,
+                                        offset: 'auto',
+                                        area: ['60%', '70%'],
+                                        type: 2,
+                                        content: vod_url //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
+                                        });
+                                }else{
+                                    layer.msg("该文件暂不支持在线预览");
+                                }
                             })                           
                         }
                     });

@@ -152,5 +152,12 @@ Z-Cloud云盘网页端
 
 ```
 
+#### 感谢以下开源项目
+
+Layui：https://www.layui.com/
+JS解析PDF：http://mozilla.github.io/pdf.js/
+如何使用：https://blog.csdn.net/weixin_42645716/article/details/107188081
+http://www.voidcn.com/article/p-dlrehjmd-brv.html
+
 
 

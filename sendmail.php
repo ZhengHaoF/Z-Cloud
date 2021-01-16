@@ -19,7 +19,7 @@ function fuck(){
 		$mail->CharSet = 'UTF-8';
 		$mail->FromName = '云盘网页端';
 		$mail->Username ='1715005995'; //发送账号
-		$mail->Password = 'whpvguldlvaqiiee'; //授权码
+		$mail->Password = ''; //授权码
 		$mail->From = '1715005995@QQ.COM';
 		$mail->isHTML(true); 
 		$mail->addAddress('1715005995@QQ.COM','这个QQ的昵称');

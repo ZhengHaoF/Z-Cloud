@@ -43,6 +43,16 @@ function getGroup()
     <script src="js/cos-auth.min.js"></script>
     <script src="js/mDialogMin.js"></script> <!-- 弹窗js-->
     <link href="css/dialog.css" rel="stylesheet"><!-- 弹窗css-->
+    <style>
+        /*不知道为啥，这个只能在页内样式中设置 */
+        #user_count{
+            color: #5cacee;
+            position: absolute;
+            right: 15%;
+            top: 2%;
+            font-size: 18px;
+        }
+    </style>
     <script src="https://libs.baidu.com/jquery/2.1.1/jquery.min.js"></script>
     <!--
     <script src="../js/jquery-3.2.1.min.js"></script>
@@ -290,6 +300,7 @@ function getGroup()
         }
 
         function up() {
+            //上传文件
             layui.use('layer', function () {
                 layer.open({
                     type: 2,
@@ -302,6 +313,39 @@ function getGroup()
                 });
             });
         }
+
+        function user_count(){
+            //用量统计
+            $.post("../API/user_count.php",{
+                "Token": getCookie("Token"),
+                "id": getCookie("user_id"),
+                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
+            },function(data){
+                var user_count_files_num_and_size_json = JSON.parse(data);
+                var status = user_count_files_num_and_size_json['status']
+                if(status="200"){
+                    //成功
+                    var user_files_count_size = user_count_files_num_and_size_json['user_files_count_size']; //空间用量：
+                    var user_files_count_num = user_count_files_num_and_size_json['user_files_count_num']; //文件数量
+                    console.log("空间用量：" + Math.round(user_files_count_size/1024/1024*10)/10 + "MB");
+                    console.log("文件数量：" + user_files_count_num);
+                    var str = "空间用量：" + Math.round(user_files_count_size/1024/1024*10)/10 + "MB" + "<br/>" +"文件数量：" + user_files_count_num
+                    layui.use('layer', function (){
+                        layer.open({
+                            type: 1,
+                            content:str
+                        });
+                    });
+
+                }else{
+                    alert(status)
+                }
+            })
+        }
+
+        function d_offline(){
+            alert("正在开发");
+        }
     </script>
     <!-- 人物  CSS
     <link rel="stylesheet" href="https://model-1253780623.cos.ap-guangzhou.myqcloud.com/live2d/css/live2d.css"/>
@@ -310,6 +354,7 @@ function getGroup()
 <body>
 <header>
     <div id="headName"><em>Z-Cloud</em></div>
+    <div id="user_count" onclick="user_count()">用量统计</div>
     <div id="upload" onclick="up()">上传</div>
     <!-- <div id="xhx"></div>
   <div id="File_synchronization_time">登录时间：<span><?php echo(date("Y-m-d H:i:s")) ?></span><span

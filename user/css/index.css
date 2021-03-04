@@ -1,4 +1,3 @@
-
 #upload {
 	color: #5cacee;
 	position: absolute;
@@ -6,7 +5,20 @@
 	top: 2%;
 	font-size: 18px;
 }
-
+#uset_count{
+	color: #5cacee;
+	position: absolute;
+	right: 20%;
+	top: 2%;
+	font-size: 18px;
+}
+#d_offline {
+	color: #5cacee;
+	position: absolute;
+	right: 20%;
+	top: 2%;
+	font-size: 18px;
+}
 
 #headName {
 	font-size: 25px;

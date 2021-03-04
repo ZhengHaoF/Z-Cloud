@@ -50,7 +50,6 @@ if (time() - $time < 3600 and time() - $userTime < 5) {
             echo "删除完成";
         }
 
-
     } else {
         echo "<script>alert('用户不存在')</script>";
         echo $id;

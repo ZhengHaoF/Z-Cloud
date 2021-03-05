@@ -1,5 +1,5 @@
 <?php
-//对象储存复制对象到指定文件夹
+//对象储存复制对象到指定文件夹 没用的
 require "./cos_sdk_config.php"; //初始化SDK
 require "./RSA_decode.php"; //引入加密PHP
 require "../config.php";

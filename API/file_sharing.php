@@ -1,24 +1,18 @@
 <?php
 //文件分享模块 + 网址缩短
 require "./cos_sdk_config.php";
-require "./RSA_decode.php"; //引入加密PHP
 require "../config.php";
-$TokenJson = RSA_decode($_POST['Token']);
-$id = $_POST['id']; //用户名
-$Token = json_decode($TokenJson, true); //true是让这个傻逼东西返回将返回 array 而非 object 。妈的好端端要返回对象，老子搞一天
-$pwd = $Token['pwd']; //获取密码MD5
-$time = $Token['time'];//获取时间
+require "./user_authentication.php";
+$user_name = $_POST['id']; //用户名
+$Token = $_POST['Token']; //用户token
+$userTime = $_POST['userTime']; //用户时间
+//私有参数
 $file_key = $_POST['file_key']; //文件MD5
-$userTime = $_POST['userTime']; //用户提交请求时的时间,这个设计有问题，有时间要改，用户采用RC4来加密才行
-if (time() - $time < 3600 and time() - $userTime < 5) {
+$status_json = json_decode(user_authentication($user_name,$Token,$userTime),true); //用户登录验证
+if($status_json['status']=="200"){
     $conn = mysqli_connect($MySqlHost, $MySqlUser, $MySqlPwd, $MySqlDatabaseName);
-    mysqli_query($conn, "set character set 'utf8'");//读库
-    mysqli_query($conn, "set names 'utf8'");//写库
-    $res = mysqli_query($conn, "SELECT * FROM users WHERE `user` = '$id' AND `reg_confirm` = 'yes' AND `pwd` = '$pwd'");
-    $num = mysqli_num_rows($res);
-    if ($num > 0) {
-        //两次验证完成就放行
-        ## getObjectUrl(获取文件 UrL)
+    //验证成功
+            ## getObjectUrl(获取文件 UrL)
             // 请求成功
             //echo $signedUrl;
             $str = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -32,20 +26,16 @@ if (time() - $time < 3600 and time() - $userTime < 5) {
                 }
                 $res = mysqli_query($conn, "SELECT COUNT(*) FROM files_share WHERE file_code = '$file_code'");
             } while (mysqli_fetch_row($res)[0] = 0);
-            $res = mysqli_query($conn, "INSERT INTO files_share VALUES('$file_code','$file_key','$id','$time')");  //写入文件分享数据库
+            $res = mysqli_query($conn, "INSERT INTO files_share VALUES('$file_code','$file_key','$user_name','$userTime')");  //写入文件分享数据库
             mysqli_close($conn);
             //echo $signedUrl;
             echo "{\"url\":" ."\"" .$host  ."share". "\",". "\"file_code\":" ."\"" . $file_code . "\"" ."}";
             //返回示例：{"url":"http://localhost/Z-Cloud/share","file_code":"1LBN"}
 
-    } else {
-        echo "<script>alert('用户不存在')</script>";
-        echo $id;
-    }
-} else {
-    echo "<script>alert('非法请求')</script>";
-    echo time() - $time;
+}else{
+    echo($status_json['status'] . "_" . $status_json['msg'] . "_" . $status_json['time']);
 }
+
 
 //网址缩短
 function get_short_url($long_url)

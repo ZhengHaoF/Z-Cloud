@@ -18,7 +18,9 @@ Only from the root, we rent object storage to build their own cloud disk, leavin
 
 So that brings us to Z-Cloud
  --Salty Zheng
+
 #### Web disk introduction
+
 1. this is originally a senior high school sophomore wrote a thing, naive level is too bad, really can not update. Thanks to the bat, in the spring of 2020 began to update again
 
 #### Instructions for use
@@ -27,7 +29,9 @@ So that brings us to Z-Cloud
 2. config.php is the configuration file, modify it according to the actual situation
 3. there is a cos_sdk_config.php file in the API folder, just replace the corresponding secretId, secretKey, region and bucket
 4. Because you don't want to touch Tencent's SDK, you need to change the secretId, secretKey, region and bucket in cos-js-sdk-v5/server/sts.php.
+
 #### Module introduction
+
 1. API module
 2. login module
 3. user module
@@ -40,6 +44,3 @@ Layui: https://www.layui.com/
 JS parsing PDF: http://mozilla.github.io/pdf.js/
 How to use : https://blog.csdn.net/weixin_42645716/article/details/107188081
 http://www.voidcn.com/article/p-dlrehjmd-brv.html
-
-
-Translated with www.DeepL.com/Translator (free version)

@@ -2,7 +2,10 @@
 
 Z-Cloud云盘网页端
 
-#### 介绍
+![](https://web-1253780623.cos.ap-shanghai.myqcloud.com/zhf-blog/images/Z-Cloud%E4%BA%91%E7%9B%98/%E5%AE%A3%E4%BC%A0.jpg)
+云盘地址：http://cloud.zhfblog.top/
+更新日志：https://zhfhz.gitee.io/z-cloud
+于2020年12月2日，正式开源
 
 据IDC预测，2020年全球产生数据量将超过40ZB，相当于地球上每个人产生5200GB的数据。
 
@@ -18,21 +21,26 @@ Z-Cloud云盘网页端
 
 所以这就有了Z-Cloud
  ——咸鱼郑某
+
 #### 网盘介绍
-1.  这原本水平太差，实在更新不下去了。因为蝙蝠，于2020年春天又开始更新
+
+1.  这原本水平太差，实在更新不下去了。因为蝙蝠，于2020年春天又开始更新。
 
 #### 使用说明
 
-1. 我写了大量API接口都堆在API文件夹里
-2. config.php是配置文件，根据实际情况修改
-3. 在API文件夹中有个cos_sdk_config.php文件，把相应的secretId、secretKey、region、bucket替换掉就好
-4. 因为不想动腾讯的SDK，所以在cos-js-sdk-v5/server/sts.php里还需要改一遍secretId、secretKey、region、bucket
-#### 模块介绍
-1. API模块
-2. 登录模块
-3. 用户模块
-4. 管理员模块
-5. 分享功能模块
+1.  我写了大量API接口都堆在API文件夹里
+2.  config.php是配置文件，根据实际情况修改
+3.  在API文件夹中有个cos_sdk_config.php文件，把相应的secretId、secretKey、region、bucket替换掉就好
+4.  因为不想动腾讯的SDK，所以在cos-js-sdk-v5/server/sts.php里还需要改一遍secretId、secretKey、region、bucket
+
+
+#### 模块介绍  
+
+1. API模块  
+2. 登录模块  
+3. 用户模块  
+4. 管理员模块  
+5. 分享功能模块  
 
 #### 感谢以下开源项目
 

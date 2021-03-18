@@ -4,7 +4,9 @@ Z-Cloud云盘网页端
 
 ![](https://web-1253780623.cos.ap-shanghai.myqcloud.com/zhf-blog/images/Z-Cloud%E4%BA%91%E7%9B%98/%E5%AE%A3%E4%BC%A0.jpg)
 云盘地址：http://cloud.zhfblog.top/
+
 更新日志：https://zhfhz.gitee.io/z-cloud
+
 于2020年12月2日，正式开源
 
 据IDC预测，2020年全球产生数据量将超过40ZB，相当于地球上每个人产生5200GB的数据。

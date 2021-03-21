@@ -27,9 +27,9 @@ if($status_json['status']=="200"){
         //print_r($result);
     } catch (\Exception $e) {
         // 请求失败
+        echo $bucket;
         echo($e);
     }
-
     ## getObjectUrl(获取文件 UrL)
     try {
         $signedUrl = $cosClient->getObjectUrl($bucket, "download/".$file_name, '+60 minutes');

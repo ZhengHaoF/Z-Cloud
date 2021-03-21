@@ -289,6 +289,25 @@ function getGroup()
                                         type: 2,
                                         content: vod_url //这里content是一个URL，如果你不想让iframe出现滚动条，你还可以content: ['http://sentsin.com', 'no']
                                         });
+                                }else if(suffix == "JPG" || suffix == "PNG"){
+                                    //按钮，查看图片
+                                    $.post("../API/git_file_url_db.php", {
+                                        "file_name": file_name,
+                                        "Token": getCookie("Token"),
+                                        "id": getCookie("user_id"),
+                                        "file_key": file_key,
+                                        "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
+                                    }, function (data) {
+                                        var str = "<img src='" + data + "' width='100%'>"
+                                        layer.open({
+                                        type: 1, 
+                                        content: str,
+                                        offset: 'auto',
+										area: ['50%', '80%']
+                                        });
+                                        layer.close(index);
+                                    })
+
                                 }else{
                                     layer.msg("该文件暂不支持在线预览");
                                 }

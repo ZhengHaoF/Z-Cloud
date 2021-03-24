@@ -24,10 +24,13 @@
 /*==========================================
     typography
 ===========================================*/
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900");
+/* @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700,800,900"); */
+/*@import url("./fonts.css");*/
+/* 不要外部样式CSS*/
 /*==========================================
     section title
 ==========================================*/
+
 .section-title {
   margin-bottom: 47px; }
   .section-title h2 {

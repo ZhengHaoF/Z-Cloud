@@ -108,7 +108,6 @@ function getGroup()
 
                 if (cookie_end == -1) {
                     cookie_end = allcookies.length;
-
                 }
                 //得到想要的cookie的值
                 var value = unescape(allcookies.substring(cookie_pos, cookie_end));
@@ -118,22 +117,9 @@ function getGroup()
 
         window.onload = function () {
             //记录日志
-            /*  if ("<?php echo $_COOKIE['id'];?>" != "") {
+            if ("<?php echo $_COOKIE['id'];?>" != "") {
                 Send_post("loginYes", null);
-            }*/
-            //获取IP
-            var ip = "<?php getIp() ?>";
-            $.get("https://www.36ip.cn/?ip=",
-                {
-                    ip: ip,
-                },
-                function (data) {
-                    var As = data.data;//获取json数组
-                    t = "&nbsp&nbsp您的IP" + ip + "&nbsp" + As.province + As.city + As.isp;//获取省，市，运营商
-                    document.getElementById("IpAddress").innerHTML = t;
-                    console.log(data);
-                }
-            );
+            }
             //获取用户文件
             get_user_files();
         };
@@ -144,7 +130,7 @@ function getGroup()
             $.post("../API/get_user_files_list_db.php", {  //获取用户文件
                 "Token": getCookie("Token"),
                 "id": getCookie("user_id"),
-                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳s
+                "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
             }, function (data) {
                 var files_message_json = $.parseJSON(data);
                 var files_lenght = files_message_json.length;
@@ -162,14 +148,14 @@ function getGroup()
 
                     var file_list_tr = document.createElement('tr');
                     var file_list_td = document.createElement('td');
-                    file_list_td.setAttribute("onclick","file_operating(this.value)");
+                    file_list_td.setAttribute("onclick","file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")")
                     file_list_td.setAttribute("value",file_name);
                     file_list_td.innerHTML = file_name;
                     file_list_tr.appendChild(file_list_td);
                     file_list_td = document.createElement('td');
                     file_list_td.innerHTML = file_size.toFixed(2).toString() + "MB";
                     file_list_tr.appendChild(file_list_td);
-                    file_list_td = document.createElement('td');
+                    /*file_list_td = document.createElement('td');
                     file_list_tr.appendChild(file_list_td);
                     var file_list_button = document.createElement("button");
                     file_list_button.innerText = "文件操作";
@@ -177,26 +163,10 @@ function getGroup()
                     file_list_button.style.float="left"
                     file_list_button.setAttribute("onclick","file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")")
                     file_list_button.setAttribute("value",file_name)
-                    file_list_td.appendChild(file_list_button);
+                    file_list_td.appendChild(file_list_button);*/
                     file_list_tr.appendChild(file_list_td);
                     document.getElementById("files_list_box").appendChild(file_list_tr);
-
-
-
-                    
-/*
-                                        files_list_box_html = files_list_box_html + " <tr>" +
-                        "            <td onclick='file_operating(this.value)' value='" + file_name + "'>" + file_name + "</td>" +
-                        "            <td>" + file_size.toFixed(2).toString() + "MB" + "</td>" +
-                        "            <td>" +
-                        "                <button class='layui-btn' style='float: left' onclick='file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")' value='" + file_name + "' >文件操作</button>" +
-                        "            </td>" +
-                        "        </tr>"
-*/
                 }
-
-                //document.getElementById("files_list_box").innerHTML = files_list_box_html;
-                
             })
         }
 
@@ -361,10 +331,6 @@ function getGroup()
                 }
             })
         }
-
-        function d_offline(){
-            alert("正在开发");
-        }
     </script>
     <!-- 人物  CSS
     <link rel="stylesheet" href="https://model-1253780623.cos.ap-guangzhou.myqcloud.com/live2d/css/live2d.css"/>
@@ -387,7 +353,7 @@ function getGroup()
         <tr>
             <th>文件名</th>
             <th>大小</th>
-            <th>操作</th>
+            <!--<th>操作</th>-->
         </tr>
         </thead>
         <tbody id="files_list_box">
@@ -428,6 +394,7 @@ live2D人物配置
     console.log("使用的贴图和模型：" + modelObj);
 </script>
 -->
+
 </body>
 
 </html>

@@ -35,7 +35,7 @@
 </div>
 
 <script>
-    var max_size = 104857600; //文件最大值 单位是B
+    var max_size = 209715200; //文件最大值 单位是B
     var file_key = "";
     layui.use('layer', function () {
         //获取COOKIE
@@ -161,7 +161,7 @@
                 var index_iframe = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
                 var file_size = file.size; //文件大小，单位B
                 var user_name = getCookie("user_id");
-                if(file_size>=104857600){
+                if(file_size>=max_size){
                     alert("文件大小超过限制");
                 }else{
                     $.post("../../API/upload_a_pass.php", {

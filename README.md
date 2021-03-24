@@ -3,7 +3,7 @@
 Z-Cloud云盘网页端
 
 ![](https://web-1253780623.cos.ap-shanghai.myqcloud.com/zhf-blog/images/Z-Cloud%E4%BA%91%E7%9B%98/%E5%AE%A3%E4%BC%A0.jpg)
-云盘地址：http://cloud.zhfblog.top/
+云盘地址：https://cloud.zhfblog.top/
 
 更新日志：https://zhfhz.gitee.io/z-cloud
 
@@ -26,7 +26,8 @@ Z-Cloud云盘网页端
 
 #### 网盘介绍
 
-1.  这原本水平太差，实在更新不下去了。因为蝙蝠，于2020年春天又开始更新。
+1.  原本只是自用的对接腾讯云COS工具，于2020年春天继续开始更新。
+2.  2020年12月2日，正式开源。
 
 #### 使用说明
 

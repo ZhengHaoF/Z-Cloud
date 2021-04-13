@@ -174,8 +174,7 @@ function getGroup()
             //弹窗
             layui.use('layer', function () {
                     layer.confirm('请选择操作？', {
-                        //btn: ['下载', '删除', '分享','在线播放','文件预览（测试）','PDF预览（测试）','文件预览']
-                        btn: ['下载', '删除', '分享','文件预览（测试）']
+                        btn: ['下载', '删除', '分享','文件预览','重命名']
                         , btn1: function (index) {
                             //  文件操作
                             //按钮：下载
@@ -226,9 +225,7 @@ function getGroup()
                             }, function (url_data) {
                                 var suffix = file_name.substring(file_name.lastIndexOf(".")+1).toLocaleUpperCase();//文件后缀
                                 console.log(suffix);
-                                if(suffix == "EXE"){
-                                    layer.msg("该文件不支持预览");
-                                }else if(suffix == "PDF"){
+                                if(suffix == "PDF"){
                                     //PDF处理
                                     layer.open({
                                         title:file_name,
@@ -247,7 +244,7 @@ function getGroup()
                                             title:file_name
                                         });
                                     });
-                                }else if(suffix == "MP4"){
+                                }else if(suffix == "MP4" || suffix == "AVI"){
                                     //视频预览
                                     console.log(url_data)
                                     vod_url = "../API/to_player.html?vod_url=" + window.encodeURI(window.btoa(url_data));
@@ -277,11 +274,36 @@ function getGroup()
                                         });
                                         layer.close(index);
                                     })
-
                                 }else{
                                     layer.msg("该文件暂不支持在线预览");
                                 }
                             })                           
+                        },btn5: function (index) {
+                            //弹出对话框
+                            layer.prompt({
+                                title: '请输入文件名',
+                                value: file_name
+                            },function(rename_name, index, elem){
+                                $.post("../API/rename_file.php", {
+                                    "file_name": file_name,
+                                    "rename_name":rename_name,
+                                    "Token": getCookie("Token"),
+                                    "id": getCookie("user_id"),
+                                    "file_key": file_key,
+                                    "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
+                                }, function (data) {
+                                    console.log(JSON.parse(data))
+                                    var data_json = JSON.parse(data)
+                                    if(data_json['status']=="200"){
+                                        layer.msg("重命名成功");
+                                    }else{
+                                        layer.msg("重命名失败");
+                                    }
+                                    layer.close(index);
+                                    get_user_files();
+                                }) 
+                            });
+                          
                         }
                     });
                 }

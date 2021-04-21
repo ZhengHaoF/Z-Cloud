@@ -2,7 +2,7 @@
 
 Z-Cloud云盘网页端
 
-![](https://web-1253780623.cos.ap-shanghai.myqcloud.com/zhf-blog/images/Z-Cloud%E4%BA%91%E7%9B%98/%E5%AE%A3%E4%BC%A0.jpg)
+![](./README_IMG/云盘Banner.jpg)
 云盘地址：https://cloud.zhfblog.top/
 
 更新日志：https://zhfhz.gitee.io/z-cloud

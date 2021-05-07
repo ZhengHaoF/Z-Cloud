@@ -133,6 +133,7 @@ function getGroup()
                 "userTime": Date.parse(new Date()) / 1000 //获取精确到秒的时间戳
             }, function (data) {
                 var files_message_json = $.parseJSON(data);
+                console.log(files_message_json)
                 var files_lenght = files_message_json.length;
                 var files_list_box_html = ""; //要加载的HTML文档
 				//清空文件列表
@@ -140,30 +141,50 @@ function getGroup()
 						document.getElementById("files_list_box").innerHTML = "";
 				}
                 for (var i = 0; i < files_lenght; i++) {
-                    var file_name = decodeURI(files_message_json[i]['FilesName']); //文件名URL解码
-                    var file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
-                    //var file_last_modified = files_message_json[i]['LastModified'];//文件最后修改日期
+                    let file_name = decodeURI(files_message_json[i]['FilesName']); //文件名URL解码
+                    let file_size = Number(files_message_json[i]['FilesSize']) / 1024 / 1024;//文件大小
+                    let file_key = files_message_json[i]['FilesKey']; //文件的KEY
 
-                    var file_key = files_message_json[i]['FilesKey']; //文件的KEY
-
-                    var file_list_tr = document.createElement('tr');
-                    var file_list_td = document.createElement('td');
+                    let file_list_tr = document.createElement('tr');
+                    let file_list_td = document.createElement('td');
+                    let file_list_img = document.createElement('img');
+                    let file_name_upper = file_name.toUpperCase(); //文件名大写
+                    if(file_name_upper.indexOf("JPG")!=-1){
+                        file_list_img.src = "./img/icon/jpg.svg"
+                    }else if(file_name_upper.indexOf("PNG")!=-1){
+                        file_list_img.src = "./img/icon/png.svg"
+                    }else if(file_name_upper.indexOf("TXT")!=-1){
+                        file_list_img.src = "./img/icon/txt.svg"
+                    }else if(file_name_upper.indexOf("PSD")!=-1){
+                        file_list_img.src = "./img/icon/psd.svg"
+                    }else if(file_name_upper.indexOf("MP3")!=-1){
+                        file_list_img.src = "./img/icon/mp3.svg"
+                    }else if(file_name_upper.indexOf("GIF")!=-1){
+                        file_list_img.src = "./img/icon/gif.svg"
+                    }else if(file_name_upper.indexOf("PDF")!=-1){
+                        file_list_img.src = "./img/icon/pdf.svg"
+                    }else if(file_name_upper.indexOf("RAR")!=-1){
+                        file_list_img.src = "./img/icon/rar.svg"
+                    }else if(file_name_upper.indexOf("ZIP")!=-1){
+                        file_list_img.src = "./img/icon/zip.svg"
+                    }else if(file_name_upper.indexOf("EXE")!=-1){
+                        file_list_img.src = "./img/icon/exe.svg"
+                    }else if(file_name_upper.indexOf("HTML")!=-1){
+                        file_list_img.src = "./img/icon/html.svg"
+                    }else if(file_name_upper.indexOf("MP4")!=-1){
+                        file_list_img.src = "./img/icon/mp4.svg"
+                    }else{
+                        file_list_img.src = "./img/icon/files.svg"
+                    }
+                    file_list_img.height = "50"
                     file_list_td.setAttribute("onclick","file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")")
                     file_list_td.setAttribute("value",file_name);
-                    file_list_td.innerHTML = file_name;
+                    file_list_td.appendChild(file_list_img);
+                    file_list_td.innerHTML = file_list_td.innerHTML + file_name;
                     file_list_tr.appendChild(file_list_td);
                     file_list_td = document.createElement('td');
                     file_list_td.innerHTML = file_size.toFixed(2).toString() + "MB";
                     file_list_tr.appendChild(file_list_td);
-                    /*file_list_td = document.createElement('td');
-                    file_list_tr.appendChild(file_list_td);
-                    var file_list_button = document.createElement("button");
-                    file_list_button.innerText = "文件操作";
-                    file_list_button.className = "layui-btn";
-                    file_list_button.style.float="left"
-                    file_list_button.setAttribute("onclick","file_operating(" + "\"" + file_name + "\"," + "\"" + file_key + "\"," +"\"" +files_message_json[i]['FilesSize'] +"\""+ ")")
-                    file_list_button.setAttribute("value",file_name)
-                    file_list_td.appendChild(file_list_button);*/
                     file_list_tr.appendChild(file_list_td);
                     document.getElementById("files_list_box").appendChild(file_list_tr);
                 }

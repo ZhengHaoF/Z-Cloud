@@ -12,6 +12,8 @@ if($status_json['status']=="200"){
     ## (获取文件 UrL)
     // 请求成功
     $conn = mysqli_connect($MySqlHost, $MySqlUser, $MySqlPwd, $MySqlDatabaseName);
+    mysqli_query($conn, "set character set 'utf8'");//读库
+    mysqli_query($conn, "set names 'utf8'");//写库
     $filesMessage = []; //初始化数组
     $res = mysqli_query($conn, "SELECT * FROM user_files WHERE user_id = '$user_name'");
     $index = 0;
@@ -20,6 +22,8 @@ if($status_json['status']=="200"){
         $filesMessage[$index]['FilesName'] = $rt['file_name'];
         $filesMessage[$index]['FilesSize'] = $rt['file_size'];
         $filesMessage[$index]['FilesKey'] = $rt['file_key'];
+        $filesMessage[$index]['FilesPath'] = $rt['file_path'];
+        $filesMessage[$index]['FilesType'] = $rt['file_type'];
         $index++;
     }
     echo json_encode($filesMessage);

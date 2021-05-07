@@ -26,7 +26,7 @@ if($status_json['status']=="200"){
                 }
                 $res = mysqli_query($conn, "SELECT COUNT(*) FROM files_share WHERE file_code = '$file_code'");
             } while (mysqli_fetch_row($res)[0] = 0);
-            $res = mysqli_query($conn, "INSERT INTO files_share VALUES('$file_code','$file_key','$user_name','$userTime')");  //写入文件分享数据库
+            $res = mysqli_query($conn, "INSERT INTO files_share VALUES('$file_code','$file_key','$user_name','$userTime','')");  //写入文件分享数据库
             mysqli_close($conn);
             //echo $signedUrl;
             echo "{\"url\":" ."\"" .$host  ."share". "\",". "\"file_code\":" ."\"" . $file_code . "\"" ."}";

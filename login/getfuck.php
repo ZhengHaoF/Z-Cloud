@@ -22,11 +22,10 @@
         setcookie("Token",$Token,time()+3600,"/");
 		$r_json = json_encode(array("status"=>"200","user_id" => $username ,"Token"=> $Token,"msg"=>"成功"));
 		echo $r_json;
-		header("location:../user/index.php");
+		header("location:../user/");
 	}else{
 		$r_json = json_encode(array("status"=>"403","msg"=>"访问被拒绝，用户名或密码错误"));
 		echo $r_json;
 		header("location:ERROR.html");
 	}
 }
-?>
